@@ -21,6 +21,7 @@ class Trip(models.Model):
     def __str__(self):
         return self.destination
 
+
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.SET_NULL, null=True)
