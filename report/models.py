@@ -1,6 +1,7 @@
 from django.db import models
 from user.models import Department
 
+
 # Create your models here.
 class Report(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
