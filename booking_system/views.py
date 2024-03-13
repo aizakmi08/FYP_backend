@@ -1,7 +1,8 @@
 from django.http import JsonResponse
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Driver, Trip, TripUser
 from .serializers import DriverSerializer, TripSerializer, TripUserSerializer
@@ -9,16 +10,21 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 
 
 # Create your views here.
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def drivers_list(request):
-    if request.method == 'GET':
+class DriversListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
         drivers = Driver.objects.all()
         serializer = DriverSerializer(drivers, many=True)
-        return JsonResponse({'data': serializer.data})
+        return Response({'data': serializer.data})
 
-    if request.method == 'POST':
+    def post(self, request, format=None):
         serializer = DriverSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class TripViewSet(viewsets.ModelViewSet):
+    queryset = Trip.objects.all()
+    serializer_class = TripSerializer
