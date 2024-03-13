@@ -25,6 +25,34 @@ class DriversListView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class TripViewSet(viewsets.ModelViewSet):
-    queryset = Trip.objects.all()
-    serializer_class = TripSerializer
+
+class TripListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        trips = Trip.objects.all()
+        serializer = TripSerializer(trips, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = TripSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TripUserListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        trip_users = TripUser.objects.all()
+        serializer = TripUserSerializer(trip_users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = TripUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
