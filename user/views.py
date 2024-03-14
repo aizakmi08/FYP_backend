@@ -5,8 +5,9 @@ from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
 
+
 # Create your views here.
-class UserListView(APIView):
+class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):

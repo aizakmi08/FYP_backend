@@ -8,6 +8,7 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
+
 class User(models.Model):
     department_choices = (
         ("STAFF", "Staff"),
