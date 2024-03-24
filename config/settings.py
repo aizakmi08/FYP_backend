@@ -11,7 +11,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from os import environ, path
+from os import environ
+from dotenv import load_dotenv
+
+# Load the environment variables
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+7(p4xji^pqs0m9o^c1pwk&l@r6s_l3o!pd-+i39)m60)orw8='
+SECRET_KEY = environ.get('SECRET_KEY', 'django-insecure-+7(p4xji^pqs0m9o^c1pwk&l@r6s_l3o!pd-+i39)m60)orw8=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -80,11 +84,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'USER': 'John',
-        'PASSWORD': '87654123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': BASE_DIR / environ.get('DB_NAME', 'db.sqlite3'),
+        'USER': environ.get('DB_USER', ''),
+        'PASSWORD': environ.get('DB_PASSWORD', ''),
+        'HOST': environ.get('DB_HOST', ''),
+        'PORT': environ.get('DB_PORT', ''),
     }
 }
 
