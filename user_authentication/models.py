@@ -20,6 +20,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, password=password, **extra_fields)
+        user.is_active = False
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -41,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='users', null=True)
 

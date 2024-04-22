@@ -1,9 +1,8 @@
-import os
-from pathlib import Path
-from os import environ
-from dotenv import load_dotenv
-
 from datetime import timedelta
+from os import environ
+from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Load the environment variables
 load_dotenv()
@@ -101,7 +100,6 @@ DATABASES = {
         'PORT': environ.get('DB_PORT', ''),
     }
 }
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'
@@ -207,11 +205,20 @@ DJOSER = {
     'SET_PASSWORD_RETYPE': True,
     'PASSWORD_RESET_CONFIRMATION_URL': '/password/reset/confirm/{uid},{token}',
     'USERNAME_RESET_CONFIRMATION_URL': '/email/reset/confirm/{uid},{token}',
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'ACTIVATION_URL': 'user_authentication/auth/users/activation/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
-    # 'SERIALIZERS': {
-    #     'user_create': 'user_create.serializers.UserSerializer',
-    #     'user': 'user_create.serializers.UserSerializer',
-    #     'user_delete': 'djoser.serializers.UserDeleteSerializer',
-    # }
+    'SEND_CONFIRM_EMAIL': True,
+    'SERIALIZERS': {
+        'user_create': 'user_authentication.serializers.UserSerializer',
+        'user': 'user_authentication.serializers.UserSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+        'activation': 'djoser.serializers.ActivationSerializer',
+        'confirmation': 'djoser.email.ConfirmationEmail',
+        'password_reset': 'djoser.email.PasswordResetEmail',
+    },
+    'EMAIL': {
+        'activation': 'user_authentication.email.CustomActivationEmail',
+        'confirmation': 'djoser.email.ConfirmationEmail',
+        'password_reset': 'djoser.email.PasswordResetEmail',
+    }
 }
