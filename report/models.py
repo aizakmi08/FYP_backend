@@ -1,5 +1,5 @@
 from django.db import models
-from user.models import Department
+from user_authentication.models import Department
 
 
 # Create your models here.

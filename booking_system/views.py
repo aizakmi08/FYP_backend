@@ -42,7 +42,7 @@ class TripListView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TripUserListView(APIView):
+class TripUserView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
