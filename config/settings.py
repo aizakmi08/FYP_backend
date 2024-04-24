@@ -72,7 +72,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -217,7 +217,7 @@ DJOSER = {
         'password_reset': 'djoser.email.PasswordResetEmail',
     },
     'EMAIL': {
-        'activation': 'user_authentication.email.CustomActivationEmail',
+        'activation': 'user_authentication.email.email.CustomActivationEmail',
         'confirmation': 'djoser.email.ConfirmationEmail',
         'password_reset': 'djoser.email.PasswordResetEmail',
     }
