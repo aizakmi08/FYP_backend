@@ -15,10 +15,18 @@ from django.conf import settings
 import base64
 from datetime import datetime
 from django.db.models import Q
+from django.contrib.auth.decorators import user_passes_test
+from .forms import TripRequestForm
+from .models import TripRequest
+
 
 context = {
     'page_title' : 'File Management System',
 }
+
+def admin_check(user):
+    return user.is_staff
+
 #login
 def login_user(request):
     logout(request)
@@ -45,7 +53,7 @@ def logoutuser(request):
     logout(request)
     return redirect('/')
 
-# @login_required
+@login_required
 def home(request):
     context['page_title'] = 'Home'
     context['buses'] = Bus.objects.count()
@@ -118,7 +126,7 @@ def profile(request):
 
 
 # Category
-@login_required
+@user_passes_test(admin_check)
 def category_mgt(request):
     context['page_title'] = "Bus Categories"
     categories = Category.objects.all()
@@ -126,7 +134,7 @@ def category_mgt(request):
 
     return render(request, 'category_mgt.html', context)
 
-@login_required
+@user_passes_test(admin_check)
 def save_category(request):
     resp = {'status':'failed','msg':''}
     if request.method == 'POST':
@@ -150,7 +158,7 @@ def save_category(request):
         resp['msg'] = 'No data has been sent.'
     return HttpResponse(json.dumps(resp), content_type = 'application/json')
 
-@login_required
+@user_passes_test(admin_check)
 def manage_category(request, pk=None):
     context['page_title'] = "Manage Category"
     if not pk is None:
@@ -161,7 +169,7 @@ def manage_category(request, pk=None):
 
     return render(request, 'manage_category.html', context)
 
-@login_required
+@user_passes_test(admin_check)
 def delete_category(request):
     resp = {'status':'failed', 'msg':''}
 
@@ -181,7 +189,7 @@ def delete_category(request):
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 # Location
-@login_required
+@user_passes_test(admin_check)
 def location_mgt(request):
     context['page_title'] = "Locations"
     locations = Location.objects.all()
@@ -189,7 +197,7 @@ def location_mgt(request):
 
     return render(request, 'location_mgt.html', context)
 
-@login_required
+@user_passes_test(admin_check)
 def save_location(request):
     resp = {'status':'failed','msg':''}
     if request.method == 'POST':
@@ -213,7 +221,7 @@ def save_location(request):
         resp['msg'] = 'No data has been sent.'
     return HttpResponse(json.dumps(resp), content_type = 'application/json')
 
-@login_required
+@user_passes_test(admin_check)
 def manage_location(request, pk=None):
     context['page_title'] = "Manage Location"
     if not pk is None:
@@ -224,7 +232,7 @@ def manage_location(request, pk=None):
 
     return render(request, 'manage_location.html', context)
 
-@login_required
+@user_passes_test(admin_check)
 def delete_location(request):
     resp = {'status':'failed', 'msg':''}
 
@@ -245,7 +253,7 @@ def delete_location(request):
 
 
 # bus
-@login_required
+@user_passes_test(admin_check)
 def bus_mgt(request):
     context['page_title'] = "Buses"
     buses = Bus.objects.all()
@@ -253,7 +261,7 @@ def bus_mgt(request):
 
     return render(request, 'bus_mgt.html', context)
 
-@login_required
+@user_passes_test(admin_check)
 def save_bus(request):
     resp = {'status':'failed','msg':''}
     if request.method == 'POST':
@@ -277,7 +285,7 @@ def save_bus(request):
         resp['msg'] = 'No data has been sent.'
     return HttpResponse(json.dumps(resp), content_type = 'application/json')
 
-@login_required
+@user_passes_test(admin_check)
 def manage_bus(request, pk=None):
     context['page_title'] = "Manage Bus"
     categories = Category.objects.filter(status = 1).all()
@@ -290,7 +298,7 @@ def manage_bus(request, pk=None):
 
     return render(request, 'manage_bus.html', context)
 
-@login_required
+@user_passes_test(admin_check)
 def delete_bus(request):
     resp = {'status':'failed', 'msg':''}
 
@@ -311,7 +319,7 @@ def delete_bus(request):
 
 
 # schedule
-@login_required
+@user_passes_test(admin_check)
 def schedule_mgt(request):
     context['page_title'] = "Trip Schedules"
     schedules = Schedule.objects.all()
@@ -319,7 +327,7 @@ def schedule_mgt(request):
 
     return render(request, 'schedule_mgt.html', context)
 
-@login_required
+@user_passes_test(admin_check)
 def save_schedule(request):
     resp = {'status':'failed','msg':''}
     if request.method == 'POST':
@@ -343,7 +351,7 @@ def save_schedule(request):
         resp['msg'] = 'No data has been sent.'
     return HttpResponse(json.dumps(resp), content_type = 'application/json')
 
-@login_required
+@user_passes_test(admin_check)
 def manage_schedule(request, pk=None):
     context['page_title'] = "Manage Schedule"
     buses = Bus.objects.filter(status = 1).all()
@@ -358,7 +366,7 @@ def manage_schedule(request, pk=None):
 
     return render(request, 'manage_schedule.html', context)
 
-@login_required
+@user_passes_test(admin_check)
 def delete_schedule(request):
     resp = {'status':'failed', 'msg':''}
 
@@ -378,7 +386,7 @@ def delete_schedule(request):
     return HttpResponse(json.dumps(resp), content_type="application/json")  
 
 
-# scheduled Trips
+@login_required
 def scheduled_trips(request):
     if not request.method == 'POST':
         context['page_title'] = "Scheduled Trips"
@@ -401,6 +409,7 @@ def scheduled_trips(request):
 
     return render(request, 'scheduled_trips.html', context)
 
+@login_required
 def manage_booking(request, schedPK=None, pk=None):
     context['page_title'] = "Manage Booking"
     context['schedPK'] = schedPK
@@ -417,6 +426,7 @@ def manage_booking(request, schedPK=None, pk=None):
 
     return render(request, 'manage_book.html', context)
 
+@login_required
 def save_booking(request):
     resp = {'status':'failed','msg':''}
     if request.method == 'POST':
@@ -444,6 +454,7 @@ def save_booking(request):
         resp['msg'] = 'No data has been sent.'
     return HttpResponse(json.dumps(resp), content_type = 'application/json')
 
+@user_passes_test(admin_check)
 def bookings(request):
     context['page_title'] = "Bookings"
     bookings = Booking.objects.all()
@@ -452,7 +463,7 @@ def bookings(request):
     return render(request, 'bookings.html', context)
 
 
-@login_required
+@user_passes_test(admin_check)
 def view_booking(request,pk=None):
     if pk is None:
         messages.error(request, "Unkown Booking ID")
@@ -463,7 +474,7 @@ def view_booking(request,pk=None):
         return render(request, 'view_booked.html', context)
 
 
-@login_required
+@user_passes_test(admin_check)
 def pay_booked(request):
     resp = {'status':'failed','msg':''}
     if not request.method == 'POST':
@@ -482,7 +493,7 @@ def pay_booked(request):
     
     return HttpResponse(json.dumps(resp),content_type = 'application/json')
 
-@login_required
+@user_passes_test(admin_check)
 def delete_booking(request):
     resp = {'status':'failed', 'msg':''}
 
@@ -502,6 +513,7 @@ def delete_booking(request):
     
     return HttpResponse(json.dumps(resp), content_type="application/json")  
 
+@login_required
 def find_trip(request):
     context['page_title'] = 'Find Trip Schedule'
     context['locations'] = Location.objects.filter(status = 1).all
@@ -509,3 +521,21 @@ def find_trip(request):
     context['today'] = today
     return render(request, 'find_trip.html', context)
     
+@login_required
+def request_trip(request):
+    if request.method == 'POST':
+        form = TripRequestForm(request.POST)
+        if form.is_valid():
+            trip_request = form.save(commit=False)
+            trip_request.user = request.user
+            trip_request.save()
+            return redirect('home-page')
+    else:
+        form = TripRequestForm()
+    return render(request, 'request_trip.html', {'form': form})
+
+
+@user_passes_test(admin_check)
+def trip_request_list(request):
+    trip_requests = TripRequest.objects.all()
+    return render(request, 'trip_request_list.html', {'trip_requests': trip_requests})

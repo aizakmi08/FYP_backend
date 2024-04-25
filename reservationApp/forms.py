@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from more_itertools import quantify
 from .models import Category, Location, Bus, Schedule, Booking
 from datetime import datetime
+from .models import TripRequest
 
 class UserRegistration(UserCreationForm):
     email = forms.EmailField(max_length=250,help_text="The email field is required.")
@@ -259,6 +260,11 @@ class PayBooked(forms.ModelForm):
     class Meta:
         model = Booking
         fields = ('status',)
+
+class TripRequestForm(forms.ModelForm):
+    class Meta:
+        model = TripRequest
+        fields = ['bus', 'depart', 'destination', 'schedule', 'fare']
 
 
     

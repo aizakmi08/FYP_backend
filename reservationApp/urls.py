@@ -44,6 +44,7 @@ urlpatterns = [
     path('pay_booked',views.pay_booked,name='pay-booked'),
     path('delete_booking',views.delete_booking,name='delete-booking'),
     path('find_trip',views.find_trip,name='find-trip-page'),
-
+    path('request_trip/', views.request_trip, name='request_trip'),
+    path('trip_request_list/', views.trip_request_list, name='trip_request_list'),
 
 ]

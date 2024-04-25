@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block pageContent %}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card card-default rounded-0 shadow ">
+        <div class="card-header">
+            <h4 class="card-title fw-bold">Trip Requests</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Bus</th>
+                        <th>Depart</th>
+                        <th>Destination</th>
+                        <th>Schedule</th>
+                        <th>Fare</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trip_request in trip_requests %}
+                    <tr>
+                        <td>{{ trip_request.user.username }}</td>
+                        <td>{{ trip_request.bus.bus_number }}</td>
+                        <td>{{ trip_request.depart.location }}</td>
+                        <td>{{ trip_request.destination.location }}</td>
+                        <td>{{ trip_request.schedule }}</td>
+                        <td>{{ trip_request.fare }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">No trip requests.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
