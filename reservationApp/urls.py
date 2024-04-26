@@ -46,5 +46,5 @@ urlpatterns = [
     path('find_trip',views.find_trip,name='find-trip-page'),
     path('request_trip/', views.request_trip, name='request_trip'),
     path('trip_request_list/', views.trip_request_list, name='trip_request_list'),
-
+    path('handle_request/<int:request_id>/', views.handle_request, name='handle_request'),
 ]

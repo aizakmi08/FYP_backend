@@ -81,7 +81,7 @@ class TripRequest(models.Model):
     destination = models.ForeignKey(Location,on_delete=models.CASCADE, related_name='request_destination')
     schedule= models.DateField()
     fare= models.FloatField()
-    status = models.CharField(max_length=2, choices=(('1','Active'),('2','Cancelled')), default=1)
+    status = models.CharField(max_length=10, choices=(('active', 'Active'), ('cancelled', 'Cancelled'), ('accepted', 'Accepted'), ('rejected', 'Rejected')), default='active')
     date_created = models.DateField(default=timezone.now)
     date_updated = models.DateField(auto_now=True)
 

@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 
 {% block pageContent %}
+<script>
+    function validateDate() {
+        var tripDate = document.getElementById('id_schedule').value;
+        var today = new Date();
+        today.setHours(0,0,0,0); // Reset time part, to compare only the date part
+        var inputDate = new Date(tripDate);
+    
+        if(inputDate <= today) {
+            alert('You may request a trip at least one day before the trip');
+            return false;
+        }
+        return true;
+    }
+</script>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card card-default rounded-0 shadow ">
         <div class="modal-content">
@@ -8,7 +22,7 @@
                 <h5 class="modal-title" id="tripRequestModalLabel">Request a Trip</h5>
             </div>
             <div class="modal-body">
-                <form id="tripRequestForm" method="post">
+                <form id="tripRequestForm" method="post" onsubmit="return validateDate()">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-primary">Send Request</button>
@@ -18,3 +32,4 @@
     </div>
 </div>
 {% endblock %}
+

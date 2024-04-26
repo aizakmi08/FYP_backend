@@ -529,7 +529,8 @@ def request_trip(request):
             trip_request = form.save(commit=False)
             trip_request.user = request.user
             trip_request.save()
-            return redirect('home-page')
+            messages.success(request, 'Your trip request has been sent successfully.')
+            form = TripRequestForm()
     else:
         form = TripRequestForm()
     return render(request, 'request_trip.html', {'form': form})
@@ -539,3 +540,23 @@ def request_trip(request):
 def trip_request_list(request):
     trip_requests = TripRequest.objects.all()
     return render(request, 'trip_request_list.html', {'trip_requests': trip_requests})
+
+def handle_request(request, request_id):
+    trip_request = TripRequest.objects.get(id=request_id)
+    if request.POST['action'] == 'accept':
+        trip_request.status = 'accepted'
+        Schedule.objects.create(
+            code=str(trip_request.id),  # you might want to generate a unique code here
+            bus=trip_request.bus,
+            depart=trip_request.depart,
+            destination=trip_request.destination,
+            schedule=trip_request.schedule,
+            fare=trip_request.fare,
+            status='1'  # assuming '1' means 'Active'
+        )
+        messages.success(request, 'Request has been added to Scheduled Trips List successfully.')
+    else:
+        trip_request.status = 'rejected'
+        messages.success(request, 'Request has been rejected successfully.')
+    trip_request.delete()  # delete the trip request after it has been handled
+    return redirect('trip_request_list')

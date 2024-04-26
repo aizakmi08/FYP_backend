@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
 
 {% block pageContent %}
+<style>
+.btn {
+	border-radius: 0;
+	margin: 3px;
+	text-transform: uppercase;
+	font-family: 'Oswald', sans-serif;
+}
+.btn-outline-danger:hover {
+	background: #DC4C64;
+	color: #fff;
+}
+.btn-outline-success:hover {
+	background: #14A44D;
+	color: #fff;
+}
+</style>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card card-default rounded-0 shadow ">
         <div class="card-header">
@@ -16,6 +32,7 @@
                         <th>Destination</th>
                         <th>Schedule</th>
                         <th>Fare</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,10 +44,18 @@
                         <td>{{ trip_request.destination.location }}</td>
                         <td>{{ trip_request.schedule }}</td>
                         <td>{{ trip_request.fare }}</td>
+                        <td class="px-2 py-1 align-middle text-center">
+                            <form method="post" action="{% url 'handle_request' trip_request.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-success" type="submit" name="action" value="accept">Accept</button>
+                                <button class="btn btn-outline-danger" type="submit" name="action" value="reject">Reject</button>
+                                
+                            </form>
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="7">No trip requests.</td>
+                        <td colspan="8">No trip requests.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -39,4 +64,3 @@
     </div>
 </div>
 {% endblock %}
-
