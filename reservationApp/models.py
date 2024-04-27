@@ -51,7 +51,7 @@ class Schedule(models.Model):
         return str(self.code + ' - ' + self.bus.bus_number)
 
     def count_available(self):
-        booked = Booking.objects.filter(schedule=self).aggregate(Sum('seats'))['seats__sum']
+        booked = Booking.objects.filter(schedule=self, status='2').aggregate(Sum('seats'))['seats__sum']
         if booked is not None:
             return self.bus.seats - booked
         else:
@@ -63,7 +63,7 @@ class Booking(models.Model):
     name = models.CharField(max_length=250)
     schedule = models.ForeignKey(Schedule,on_delete=models.CASCADE)
     seats = models.IntegerField()
-    status = models.CharField(max_length=2, choices=(('1','Pending'),('2','Paid')), default=1)
+    status = models.CharField(max_length=2, choices=(('1','Pending'),('2','Approved'),('3','Rejected')), default=1)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
 

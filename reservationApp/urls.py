@@ -41,10 +41,12 @@ urlpatterns = [
     path('save_booking',views.save_booking,name='save-book'),
     path('booking',views.bookings,name='booking-page'),
     path('veiw_booking/<int:pk>',views.view_booking,name='veiw-booking'),
-    path('pay_booked',views.pay_booked,name='pay-booked'),
+    path('approve_booked',views.approve_booked,name='approve-booked'),
+    path('reject-booked/', views.reject_booked, name='reject-booked'),
     path('delete_booking',views.delete_booking,name='delete-booking'),
     path('find_trip',views.find_trip,name='find-trip-page'),
     path('request_trip/', views.request_trip, name='request_trip'),
     path('trip_request_list/', views.trip_request_list, name='trip_request_list'),
     path('handle_request/<int:request_id>/', views.handle_request, name='handle_request'),
+    path('request_status/', views.request_status, name='request_status'),
 ]

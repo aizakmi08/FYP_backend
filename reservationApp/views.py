@@ -457,7 +457,8 @@ def save_booking(request):
 @user_passes_test(admin_check)
 def bookings(request):
     context['page_title'] = "Bookings"
-    bookings = Booking.objects.all()
+    # Exclude bookings with status '2' (approved) and '3' (rejected)
+    bookings = Booking.objects.exclude(status__in=['2', '3'])
     context['bookings'] = bookings
 
     return render(request, 'bookings.html', context)
@@ -475,7 +476,7 @@ def view_booking(request,pk=None):
 
 
 @user_passes_test(admin_check)
-def pay_booked(request):
+def approve_booked(request):
     resp = {'status':'failed','msg':''}
     if not request.method == 'POST':
         resp['msg'] = "Unknown Booked ID"
@@ -483,8 +484,29 @@ def pay_booked(request):
         booking = Booking.objects.get(id= request.POST['id'])
         form = PayBooked(request.POST, instance=booking)
         if form.is_valid():
+            booking.status = '2'  # Change the status to 'Approved'
             form.save()
-            messages.success(request, f"<b>{booking.code}</b> has been paid successfully", extra_tags='stay')
+            messages.success(request, f"<b>{booking.code}</b> has been approved successfully", extra_tags='stay')
+            resp['status'] = 'success'
+        else:
+            for field in form:
+                for error in field.errors:
+                    resp['msg'] += str(error + "<br>")
+    
+    return HttpResponse(json.dumps(resp),content_type = 'application/json')
+
+@user_passes_test(admin_check)
+def reject_booked(request):
+    resp = {'status':'failed','msg':''}
+    if not request.method == 'POST':
+        resp['msg'] = "Unknown Booked ID"
+    else:
+        booking = Booking.objects.get(id= request.POST['id'])
+        form = PayBooked(request.POST, instance=booking)
+        if form.is_valid():
+            booking.status = '3'  # Change the status to 'Rejected'
+            form.save()
+            messages.success(request, f"<b>{booking.code}</b> has been rejected", extra_tags='stay')
             resp['status'] = 'success'
         else:
             for field in form:
@@ -538,7 +560,7 @@ def request_trip(request):
 
 @user_passes_test(admin_check)
 def trip_request_list(request):
-    trip_requests = TripRequest.objects.all()
+    trip_requests = TripRequest.objects.filter(status='active')
     return render(request, 'trip_request_list.html', {'trip_requests': trip_requests})
 
 def handle_request(request, request_id):
@@ -558,5 +580,9 @@ def handle_request(request, request_id):
     else:
         trip_request.status = 'rejected'
         messages.success(request, 'Request has been rejected successfully.')
-    trip_request.delete()  # delete the trip request after it has been handled
+    trip_request.save()
     return redirect('trip_request_list')
+
+def request_status(request):
+    trip_request = TripRequest.objects.filter(user=request.user).last()
+    return render(request, 'request_status.html', {'trip_request': trip_request})

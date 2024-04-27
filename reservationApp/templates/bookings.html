@@ -45,14 +45,18 @@
                             <td class="px-2 py-1 align-middle text-end">{{ booked.total_payable|intcomma }}</td>
                             <td class="px-1 py-1 align-middle text-center">
                                 {% if booked.status == '1' %}
-                                <span class="badge bg-primary bg-gradient rounded-pill px-2">Pending</span> {% else %}
-                                <span class="badge bg-success bg-gradient rounded-pill px-2">Paid</span> {% endif %}
+                                <span class="badge bg-primary bg-gradient rounded-pill px-2">Pending</span> 
+                                {% elif booked.status == '2' %}
+                                <span class="badge bg-success bg-gradient rounded-pill px-2">Approved</span>
+                                {% else %}
+                                <span class="badge bg-danger bg-gradient rounded-pill px-2">Rejected</span>
+                                {% endif %}
                             </td>
                             <td class="px-2 py-1 align-middle text-center">
                                 <a class="btn btn-outline-primary btn-sm view-data" href="javascript:void(0)" data-url="{% url 'veiw-booking' booked.pk %}" title="View Booking">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <button class="btn btn-outline-danger btn-sm delete-data" type="button" data-id="{{ booked.pk }}" title="Delete">
+                                <button class="btn btn-outline-danger btn-sm delete-data" type="button" value="delete" data-id="{{ booked.pk }}" title="Delete">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>

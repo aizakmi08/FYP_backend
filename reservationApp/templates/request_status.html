@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block pageContent %}
+<style>
+.status-active {
+    color: orange;
+}
+
+.status-accepted {
+    color: green;
+}
+
+.status-rejected {
+    color: red;
+}
+
+.status-cancelled {
+    color: gray;
+}
+</style>
+<div class="status-container">
+    <h2>Trip Request Status</h2>
+    <p><strong>Bus:</strong> {{ trip_request.bus.bus_number }}</p>
+    <p><strong>Depart:</strong> {{ trip_request.depart }}</p>
+    <p><strong>Destination:</strong> {{ trip_request.destination }}</p>
+    <p><strong>Schedule:</strong> {{ trip_request.schedule }}</p>
+    <p><strong>Fare:</strong> {{ trip_request.fare }}</p>
+    <p><strong>Status:</strong> 
+    {% if trip_request.status == 'active' %}
+        <span class="status-active">Under consideration</span>
+    {% elif trip_request.status == 'accepted' %}
+        <span class="status-accepted">Accepted</span>
+    {% elif trip_request.status == Null %}
+        <span>No trip requests made</span>
+    {% elif trip_request.status == 'rejected' %}
+        <span class="status-rejected">Rejected</span>
+    {% else %}
+        <span class="status-cancelled">Cancelled</span>
+    {% endif %}
+    </p>
+</div>
+
+{% endblock %}

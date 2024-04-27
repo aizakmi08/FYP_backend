@@ -15,6 +15,20 @@
         return true;
     }
 </script>
+<style>
+.btn {
+	min-height: 34px;
+	border-radius: 0;
+	margin: 3px;
+	min-width: 150px;
+	text-transform: uppercase;
+	font-family: 'Oswald', sans-serif;
+}
+.btn-outline-success:hover {
+	background: #14A44D;
+	color: #fff;
+}
+</style>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card card-default rounded-0 shadow ">
         <div class="modal-content">
@@ -25,7 +39,7 @@
                 <form id="tripRequestForm" method="post" onsubmit="return validateDate()">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Send Request</button>
+                    <button type="submit" class="btn btn-outline-success">Send Request</button>
                 </form>
             </div>
         </div>

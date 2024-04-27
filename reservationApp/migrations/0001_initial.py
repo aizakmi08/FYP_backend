@@ -72,7 +72,7 @@ class Migration(migrations.Migration):
                 ('code', models.CharField(max_length=100)),
                 ('name', models.CharField(max_length=250)),
                 ('seats', models.IntegerField()),
-                ('status', models.CharField(choices=[('1', 'Pending'), ('2', 'Paid')], default=1, max_length=2)),
+                ('status', models.CharField(choices=[('1', 'Pending'), ('2', 'Approved')], default=1, max_length=2)),
                 ('date_created', models.DateTimeField(default=django.utils.timezone.now)),
                 ('date_updated', models.DateTimeField(auto_now=True)),
                 ('schedule', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='reservationApp.schedule')),
