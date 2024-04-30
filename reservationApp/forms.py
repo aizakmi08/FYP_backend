@@ -6,16 +6,18 @@ from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm, UserC
 from django.contrib.auth.models import User
 from .models import Category, Location, Bus, Schedule, Booking
 from datetime import datetime
-from .models import TripRequest
+from .models import TripRequest, Department, UserProfile
 
 class UserRegistration(UserCreationForm):
     email = forms.EmailField(max_length=250,help_text="The email field is required.")
     first_name = forms.CharField(max_length=250,help_text="The First Name field is required.")
     last_name = forms.CharField(max_length=250,help_text="The Last Name field is required.")
+    department = forms.ModelChoiceField(queryset=Department.objects.all())
+
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'password1', 'password2', 'first_name', 'last_name')
+        fields = ('email', 'username', 'department', 'password1', 'password2', 'first_name', 'last_name')
     
 
     def clean_email(self):
@@ -32,7 +34,7 @@ class UserRegistration(UserCreationForm):
             user = User.objects.get(username = username)
         except Exception as e:
             return username
-        raise forms.ValidationError(f"The {user.username} mail is already exists/taken")
+        raise forms.ValidationError(f"The {user.username} username is already exists/taken")
 
 
 class UpdateProfile(UserChangeForm):
@@ -64,7 +66,7 @@ class UpdateProfile(UserChangeForm):
             user = User.objects.exclude(id=self.cleaned_data['id']).get(username = username)
         except Exception as e:
             return username
-        raise forms.ValidationError(f"The {user.username} mail is already exists/taken")
+        raise forms.ValidationError(f"The {user.username} username is already exists/taken")
 
 class UpdatePasswords(PasswordChangeForm):
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control form-control-sm rounded-0'}), label="Old Password")

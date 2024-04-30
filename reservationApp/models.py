@@ -6,6 +6,13 @@ from django.dispatch import receiver
 from django.db.models import Sum
 from django.contrib.auth.models import User
 
+class Department(models.Model):
+    name = models.CharField(max_length=100)
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
+
 class Category(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()

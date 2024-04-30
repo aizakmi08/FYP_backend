@@ -49,4 +49,5 @@ urlpatterns = [
     path('trip_request_list/', views.trip_request_list, name='trip_request_list'),
     path('handle_request/<int:request_id>/', views.handle_request, name='handle_request'),
     path('request_status/', views.request_status, name='request_status'),
+    path('activate/<uidb64>/<token>/', views.activate, name='activate'),
 ]

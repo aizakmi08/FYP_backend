@@ -18,6 +18,14 @@ from django.db.models import Q
 from django.contrib.auth.decorators import user_passes_test
 from .forms import TripRequestForm
 from .models import TripRequest
+from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+from .tokens import account_activation_token
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import get_user_model
 
 
 context = {
@@ -65,21 +73,57 @@ def registerUser(request):
     user = request.user
     if user.is_authenticated:
         return redirect('home-page')
+    context = {}
     context['page_title'] = "Register User"
     if request.method == 'POST':
         data = request.POST
         form = UserRegistration(data)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            pwd = form.cleaned_data.get('password1')
-            loginUser = authenticate(username= username, password = pwd)
-            login(request, loginUser)
-            return redirect('home-page')
-        else:
-            context['reg_form'] = form
+            user = form.save(commit=False)
+            user.is_active = False  # Deactivate account till it is confirmed
+            user.save()
 
-    return render(request,'register.html',context)
+            # Generate email verification token
+            token = default_token_generator.make_token(user)
+
+            # Get current site
+            current_site = get_current_site(request)
+
+            # Send an email to the user with the token
+            mail_subject = 'Activate your account.'
+            message = render_to_string('acc_active_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': token,
+            })
+            send_mail(mail_subject, message, 'info@mywebsite.com', [user.email])
+
+            messages.success(request, 'Please confirm your email address to complete the registration')
+            return redirect('login')
+        else:
+            context['form'] = form
+    else:
+        form = UserRegistration()
+        context['form'] = form
+    return render(request, 'register.html', context)
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = get_user_model().objects.get(pk=uid)
+        if default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.success(request, 'Your account has been activated, you can now login.')
+            return redirect('login')  # assuming you have a login view named 'login'
+        else:
+            messages.error(request, 'The activation link is invalid!')
+            return redirect('register-user')  # assuming you have a register view named 'register'
+    except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
+        messages.error(request, 'The activation link is invalid!')
+        return redirect('register-user')  # assuming you have a register view named 'register'
+
 
 @login_required
 def update_profile(request):
@@ -455,27 +499,6 @@ def save_booking(request):
     return HttpResponse(json.dumps(resp), content_type = 'application/json')
 
 @user_passes_test(admin_check)
-def bookings(request):
-    context['page_title'] = "Bookings"
-    # Exclude bookings with status '2' (approved) and '3' (rejected)
-    bookings = Booking.objects.exclude(status__in=['2', '3'])
-    context['bookings'] = bookings
-
-    return render(request, 'bookings.html', context)
-
-
-@user_passes_test(admin_check)
-def view_booking(request,pk=None):
-    if pk is None:
-        messages.error(request, "Unkown Booking ID")
-        return redirect('booking-page')
-    else:
-        context['page_title'] = 'Vieww Booking'
-        context['booking'] = Booking.objects.get(id = pk)
-        return render(request, 'view_booked.html', context)
-
-
-@user_passes_test(admin_check)
 def approve_booked(request):
     resp = {'status':'failed','msg':''}
     if not request.method == 'POST':
@@ -514,6 +537,28 @@ def reject_booked(request):
                     resp['msg'] += str(error + "<br>")
     
     return HttpResponse(json.dumps(resp),content_type = 'application/json')
+
+
+@user_passes_test(admin_check)
+def bookings(request):
+    context['page_title'] = "Bookings"
+    # Exclude bookings with status '2' (approved) and '3' (rejected)
+    bookings = Booking.objects.exclude(status__in=['2', '3'])
+    context['bookings'] = bookings
+
+    return render(request, 'bookings.html', context)
+
+
+@user_passes_test(admin_check)
+def view_booking(request,pk=None):
+    if pk is None:
+        messages.error(request, "Unkown Booking ID")
+        return redirect('booking-page')
+    else:
+        context['page_title'] = 'Vieww Booking'
+        context['booking'] = Booking.objects.get(id = pk)
+        return render(request, 'view_booked.html', context)
+
 
 @user_passes_test(admin_check)
 def delete_booking(request):
