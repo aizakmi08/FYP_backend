@@ -176,40 +176,41 @@ html {
             </div>
         </div>
     </div>
-    <div id="features" class="row justify-content-center">
+    <div id="features" class="container">
         <h3 class="services text-center mt-5">Our Services</h3>
-        <div class="col-md-3">
-            <div class="card h-100 d-flex flex-column shadow" style="width: 18rem;">
-                <img src="{{ MEDIA_URL }}/default/booking.jpg" class="card-img-top" alt="...">
-                <div class="card-body d-flex flex-column justify-content-between">
-                  <h5 class="card-title">Book a spot</h5>
-                  <p class="card-text">Book a spot in upcoming trip!</p>
-                  <a href="{% url 'scheduled-trips-page' %}" class="btn btn-outline-primary">Book a spot</a>
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card h-100 d-flex flex-column shadow">
+                    <img src="{{ MEDIA_URL }}/default/booking.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                      <h5 class="card-title">Book a spot</h5>
+                      <p class="card-text">Book a spot in upcoming trip!</p>
+                      <a href="{% url 'scheduled-trips-page' %}" class="btn btn-outline-primary">Book a spot</a>
+                    </div>
                 </div>
-              </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card h-100 d-flex flex-column shadow" style="width: 18rem;">
-                <img src="{{ MEDIA_URL }}/default/Browsing.png" class="card-img-top" alt="...">
-                <div class="card-body d-flex flex-column justify-content-between">
-                  <h5 class="card-title">Find a trip</h5>
-                  <p class="card-text">Maybe there is a trip on your date, go and search it!</p>
-                  <a href="{% url 'find-trip-page' %}" class="btn btn-outline-info">Find a trip</a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card h-100 d-flex flex-column shadow">
+                    <img src="{{ MEDIA_URL }}/default/Browsing.png" class="card-img-top" alt="...">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                      <h5 class="card-title">Find a trip</h5>
+                      <p class="card-text">Maybe there is a trip on your date, go and search it!</p>
+                      <a href="{% url 'find-trip-page' %}" class="btn btn-outline-info">Find a trip</a>
+                    </div>
                 </div>
-              </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card h-100 d-flex flex-column shadow" style="width: 18rem;">
-                <img src="{{ MEDIA_URL }}/default/request.jpg" class="card-img-top" alt="...">
-                <div class="card-body d-flex flex-column justify-content-between">
-                  <h5 class="card-title">Request a trip</h5>
-                  <p class="card-text">You need to go somewhere, but there are now trips on your date? Request it!</p>
-                  <a href="{% url 'request_trip' %}" class="btn btn-outline-danger">Request a trip</a>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card h-100 d-flex flex-column shadow">
+                    <img src="{{ MEDIA_URL }}/default/request.jpg" class="card-img-top" alt="...">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                      <h5 class="card-title">Request a trip</h5>
+                      <p class="card-text">You need to go somewhere, but there are now trips on your date? Request it!</p>
+                      <a href="{% url 'request_trip' %}" class="btn btn-outline-danger">Request a trip</a>
+                    </div>
                 </div>
-              </div>
+            </div>
         </div>
     </div>
-</div>
 
 {% else %}
 <!--Section: Content-->

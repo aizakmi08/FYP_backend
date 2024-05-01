@@ -7,12 +7,27 @@ from django.db.models import Sum
 from django.contrib.auth.models import User
 
 class Department(models.Model):
-    name = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    STATUS_CHOICES = [
+        ('Student', 'Student'),
+        ('Staff', 'Staff'),
+        ('Faculty', 'Faculty'),
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
-
+    DEPARTMENT_CHOICES = [
+        ('Student', 'Student'),
+        ('Staff', 'Staff'),
+        ('Faculty', 'Faculty'),
+    ]
+    department = models.CharField(
+        max_length=10,
+        choices=DEPARTMENT_CHOICES,
+        default='Student',
+    )
+    
 class Category(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
@@ -53,6 +68,16 @@ class Schedule(models.Model):
     status = models.CharField(max_length=2, choices=(('1','Active'),('2','Cancelled')), default=1)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
+    ABLE_TO_BOOK_CHOICES = [
+        ('Student', 'Student'),
+        ('Staff', 'Staff'),
+        ('Faculty', 'Faculty'),
+    ]
+    able_to_book = models.CharField(
+        max_length=10,
+        choices=ABLE_TO_BOOK_CHOICES,
+        default='Student',
+    )
 
     def __str__(self):
         return str(self.code + ' - ' + self.bus.bus_number)

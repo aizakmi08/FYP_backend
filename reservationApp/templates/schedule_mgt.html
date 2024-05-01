@@ -15,11 +15,12 @@
                     <colgroup>
                         <col width="5%">
                         <col width="15%">
+                        <col width="15%">
                         <col width="20%">
-                        <col width="30%">
+                        <col width="20%">
                         <col width="10%">
                         <col width="10%">
-                        <col width="10%">
+                        <col width="5%">
                     </colgroup>
                     <thead>
                         <tr class="bg-gradient bg-primary bg-opacity-50 text-light">
@@ -27,6 +28,7 @@
                             <th class="px-2 py-2 text-center">Schedule</th>
                             <th class="px-2 py-2 text-center">Bus</th>
                             <th class="px-2 py-2 text-center">Route (From - To)</th>
+                            <th class="px-2 py-2 text-center">Department</th>
                             <th class="px-2 py-2 text-center">Fuel cost</th>
                             <th class="px-2 py-2 text-center">Status</th>
                             <th class="px-2 py-2 text-center">Action</th>
@@ -49,6 +51,7 @@
                                     <div>{{ schedule.destination }}</div>
                                 </div>
                             </td>
+                            <td class="px-2 py-1 align-middle">{{ schedule.able_to_book }}</td>
                             <td class="px-2 py-1 align-middle">{{ schedule.fare|intcomma }}</td>
                             <td class="px-1 py-1 align-middle text-center">
                                 {% if schedule.status == '1' %}

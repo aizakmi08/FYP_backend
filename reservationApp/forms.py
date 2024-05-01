@@ -4,20 +4,20 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm, UserChangeForm
 
 from django.contrib.auth.models import User
-from .models import Category, Location, Bus, Schedule, Booking
+from .models import Category, Department, Location, Bus, Schedule, Booking
 from datetime import datetime
-from .models import TripRequest, Department, UserProfile
+from .models import TripRequest
 
 class UserRegistration(UserCreationForm):
     email = forms.EmailField(max_length=250,help_text="The email field is required.")
     first_name = forms.CharField(max_length=250,help_text="The First Name field is required.")
     last_name = forms.CharField(max_length=250,help_text="The Last Name field is required.")
-    department = forms.ModelChoiceField(queryset=Department.objects.all())
+
 
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'department', 'password1', 'password2', 'first_name', 'last_name')
+        fields = ('email', 'username', 'password1', 'password2', 'first_name', 'last_name')
     
 
     def clean_email(self):
@@ -162,10 +162,12 @@ class SaveSchedule(forms.ModelForm):
     fare = forms.FloatField(min_value=0,max_value=999999)
     schedule = forms.CharField(max_length="250")
     status = forms.ChoiceField(choices=[('1','Active'),('2','Cancelled')])
+    able_to_book = forms.ChoiceField(choices=Schedule.ABLE_TO_BOOK_CHOICES)
 
     class Meta:
         model = Schedule
-        fields = ('code','bus','depart','destination','fare','schedule','status')
+        fields = ('code', 'bus', 'depart', 'destination', 'schedule', 'fare', 'status', 'able_to_book')
+
     def clean_code(self):
         id = self.instance.id if self.instance.id else 0
         if id > 0:

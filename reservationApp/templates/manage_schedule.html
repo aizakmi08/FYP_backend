@@ -55,6 +55,18 @@
                 {% endfor %}
             </select>
         </div>
+        <div class="form-group mb-3 ">
+            <label for="able_to_book" class="control-label">Able to book</label>
+            <select name="able_to_book" id="able_to_book" class="form-select select2 rounded-0">
+                {% for choice in able_to_book_choices %}
+                    {% if schedule.able_to_book == choice.0 %}
+                        <option value="{{ choice.0 }}" selected>{{ choice.1 }}</option>
+                    {% else %}
+                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
         <div class="form-group mb-3">
             <label for="schedule" class="control-label">Schedule</label>
             <input class="form-control rounded-0" name="schedule" id="schedule" type="datetime-local" value="{{ schedule.schedule|date:'Y-m-d\TH:i' }}" required>

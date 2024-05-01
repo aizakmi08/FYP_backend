@@ -17,7 +17,7 @@ from datetime import datetime
 from django.db.models import Q
 from django.contrib.auth.decorators import user_passes_test
 from .forms import TripRequestForm
-from .models import TripRequest
+from .models import Department, TripRequest
 from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -26,6 +26,7 @@ from django.utils.encoding import force_bytes, force_str
 from .tokens import account_activation_token
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 
 context = {
@@ -83,6 +84,10 @@ def registerUser(request):
             user.is_active = False  # Deactivate account till it is confirmed
             user.save()
 
+            # Create a Department instance and associate it with the user
+            status = data.get('status')  # get the status from the submitted form data
+            Department.objects.create(user=user, status=status)
+
             # Generate email verification token
             token = default_token_generator.make_token(user)
 
@@ -106,7 +111,7 @@ def registerUser(request):
     else:
         form = UserRegistration()
         context['form'] = form
-    return render(request, 'register.html', context)
+    return render(request, 'register.html')
 
 def activate(request, uidb64, token):
     try:
@@ -382,9 +387,11 @@ def save_schedule(request):
         if schedule is None:
             form = SaveSchedule(request.POST)
         else:
-            form = SaveSchedule(request.POST, instance= schedule)
+            form = SaveSchedule(request.POST, instance=schedule)
         if form.is_valid():
-            form.save()
+            schedule = form.save(commit=False)
+            schedule.save()
+            form.save_m2m()  # save the many-to-many data for the form
             messages.success(request, 'Schedule has been saved successfully.')
             resp['status'] = 'success'
         else:
@@ -393,15 +400,19 @@ def save_schedule(request):
                     resp['msg'] += str(error + "<br>")
     else:
         resp['msg'] = 'No data has been sent.'
-    return HttpResponse(json.dumps(resp), content_type = 'application/json')
+    return HttpResponse(json.dumps(resp), content_type='application/json')
+
 
 @user_passes_test(admin_check)
 def manage_schedule(request, pk=None):
+    context = {}
     context['page_title'] = "Manage Schedule"
     buses = Bus.objects.filter(status = 1).all()
     locations = Location.objects.filter(status = 1).all()
     context['buses'] = buses
     context['locations'] = locations
+    context['able_to_book_choices'] = Schedule.ABLE_TO_BOOK_CHOICES
+
     if not pk is None:
         schedule = Schedule.objects.get(id = pk)
         context['schedule'] = schedule
@@ -432,9 +443,17 @@ def delete_schedule(request):
 
 @login_required
 def scheduled_trips(request):
+    context = {}
+    try:
+        # Get the department of the current user
+        user_department = Department.objects.get(user=request.user).status
+    except ObjectDoesNotExist:
+        user_department = None
+
     if not request.method == 'POST':
         context['page_title'] = "Scheduled Trips"
-        schedules = Schedule.objects.filter(status = 1, schedule__gt = datetime.now()).all()
+        # Filter the schedules based on the status, schedule and able_to_book fields
+        schedules = Schedule.objects.filter(status='1', schedule__gt=datetime.now(), able_to_book=user_department).all()
         context['schedules'] = schedules
         context['is_searched'] = False
         context['data'] = {}
@@ -445,9 +464,10 @@ def scheduled_trips(request):
         year = date.strftime('%Y')
         month = date.strftime('%m')
         day = date.strftime('%d')
-        depart = Location.objects.get(id = request.POST['depart'])
-        destination = Location.objects.get(id = request.POST['destination'])
-        schedules = Schedule.objects.filter(Q(status = 1) & Q(schedule__year = year) & Q(schedule__month = month) & Q(schedule__day = day) & Q(Q(depart = depart) | Q(destination = destination ))).all()
+        depart = Location.objects.get(id=request.POST['depart'])
+        destination = Location.objects.get(id=request.POST['destination'])
+        # Filter the schedules based on the status, schedule, depart, destination and able_to_book fields
+        schedules = Schedule.objects.filter(Q(status='1') & Q(schedule__year=year) & Q(schedule__month=month) & Q(schedule__day=day) & Q(Q(depart=depart) | Q(destination=destination)) & Q(able_to_book=user_department)).all()
         context['schedules'] = schedules
         context['data'] = {'date':date,'depart':depart, 'destination': destination}
 
@@ -628,6 +648,7 @@ def handle_request(request, request_id):
     trip_request.save()
     return redirect('trip_request_list')
 
+@login_required
 def request_status(request):
     trip_request = TripRequest.objects.filter(user=request.user).last()
     return render(request, 'request_status.html', {'trip_request': trip_request})

@@ -1,6 +1,7 @@
 from django.contrib import admin
-from reservationApp.models import Category, Location, Bus, Schedule, Booking, TripRequest
+from reservationApp.models import Category, Department, Location, Bus, Schedule, Booking, TripRequest
 # Register your models here.
+admin.site.register(Department)
 admin.site.register(Category)
 admin.site.register(Location)
 admin.site.register(Bus)
