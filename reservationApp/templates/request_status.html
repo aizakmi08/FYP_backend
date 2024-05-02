@@ -23,7 +23,7 @@
     {% if trip_request.status == Null %}
     <span>No trip requests made</span>
     {% else %}
-    <p><strong>Bus:</strong> {{ trip_request.bus.bus_number }}</p>
+    <p><strong>Vehicle:</strong> {{ trip_request.bus.bus_number }}</p>
     <p><strong>Depart:</strong> {{ trip_request.depart }}</p>
     <p><strong>Destination:</strong> {{ trip_request.destination }}</p>
     <p><strong>Schedule:</strong> {{ trip_request.schedule }}</p>
@@ -46,7 +46,7 @@
 </div>
 <!-- <div class="status-container">
     <h2>Booking Status</h2>
-    <p><strong>Bus:</strong> {{ booking.schedule.bus.bus_number }}</p>
+    <p><strong>Vehicle:</strong> {{ booking.schedule.bus.bus_number }}</p>
     <p><strong>Depart:</strong> {{ booking.schedule.depart }}</p>
     <p><strong>Destination:</strong> {{ booking.schedule.destination }}</p>
     <p><strong>Schedule:</strong> {{ booking.schedule.schedule }}</p>

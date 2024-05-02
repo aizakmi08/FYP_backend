@@ -43,9 +43,9 @@
                     <div class="form-floating mb-3">
                         <select class="form-control custom-select" name="status" id="status" required="required">
                             <option value="">--Select Status--</option>
-                            <option value="ST" {% if profile_form.data.status == "ST" %}selected{% endif %}>Student</option>
-                            <option value="FA" {% if profile_form.data.status == "FA" %}selected{% endif %}>Faculty</option>
-                            <option value="STF" {% if profile_form.data.status == "STF" %}selected{% endif %}>Staff</option>
+                            <option value="Student" {% if profile_form.data.status == "ST" %}selected{% endif %}>Student</option>
+                            <option value="Faculty" {% if profile_form.data.status == "FA" %}selected{% endif %}>Faculty</option>
+                            <option value="Staff" {% if profile_form.data.status == "STF" %}selected{% endif %}>Staff</option>
                         </select>
                         <label for="status" class="form-label">Status</label>
                     </div>
