@@ -50,4 +50,5 @@ urlpatterns = [
     path('handle_request/<int:request_id>/', views.handle_request, name='handle_request'),
     path('request_status/', views.request_status, name='request_status'),
     path('activate/<uidb64>/<token>/', views.activate, name='activate'),
+    path('api/scheduled_trips/', views.api_scheduled_trips, name='api_scheduled_trips'),
 ]

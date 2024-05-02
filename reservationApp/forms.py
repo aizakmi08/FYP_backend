@@ -159,14 +159,14 @@ class SaveSchedule(forms.ModelForm):
     bus = forms.IntegerField()
     depart = forms.IntegerField()
     destination = forms.IntegerField()
-    fare = forms.FloatField(min_value=0,max_value=999999)
+    seats_available = forms.IntegerField(min_value=0, max_value=999999)  # replaced fare with seats_available
     schedule = forms.CharField(max_length="250")
     status = forms.ChoiceField(choices=[('1','Active'),('2','Cancelled')])
     able_to_book = forms.ChoiceField(choices=Schedule.ABLE_TO_BOOK_CHOICES)
 
     class Meta:
         model = Schedule
-        fields = ('code', 'bus', 'depart', 'destination', 'schedule', 'fare', 'status', 'able_to_book')
+        fields = ('code', 'bus', 'depart', 'destination', 'schedule', 'seats_available', 'status', 'able_to_book')
 
     def clean_code(self):
         id = self.instance.id if self.instance.id else 0
@@ -267,7 +267,14 @@ class PayBooked(forms.ModelForm):
 class TripRequestForm(forms.ModelForm):
     class Meta:
         model = TripRequest
-        fields = ['bus', 'depart', 'destination', 'schedule', 'fare']
+        fields = ['bus', 'depart', 'destination', 'schedule', 'seats']
+        widgets = {
+            'bus': forms.Select(attrs={'class': 'form-select select2 rounded-0'}),
+            'depart': forms.Select(attrs={'class': 'form-select select2 rounded-0'}),
+            'destination': forms.Select(attrs={'class': 'form-select select2 rounded-0'}),
+            'schedule': forms.DateInput(attrs={'class': 'form-control rounded-0', 'type': 'date'}),
+            'seats': forms.NumberInput(attrs={'class': 'form-control rounded-0'}),
+        }
 
 
     

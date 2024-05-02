@@ -14,6 +14,7 @@ from cryptography.fernet import Fernet
 from django.conf import settings
 import base64
 from datetime import datetime
+from django.utils import timezone
 from django.db.models import Q
 from django.contrib.auth.decorators import user_passes_test
 from .forms import TripRequestForm
@@ -27,6 +28,8 @@ from .tokens import account_activation_token
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
+from django.core import serializers
 
 
 context = {
@@ -64,11 +67,15 @@ def logoutuser(request):
 
 @login_required
 def home(request):
+    today = timezone.now()
+    tomorrow = today + timezone.timedelta(days=1)
     context['page_title'] = 'Home'
     context['buses'] = Bus.objects.count()
     context['categories'] = Category.objects.count()
-    context['upcoming_trip'] = Schedule.objects.filter(status= 1, schedule__gt = datetime.today()).count()
-    return render(request, 'home.html',context)
+    context['trip_requests'] = TripRequest.objects.count()
+    context['upcoming_trip'] = Schedule.objects.filter(status=1, schedule__gt=today).count()
+    context['todays_trip'] = Schedule.objects.filter(schedule__range=(today, tomorrow)).count()
+    return render(request, 'home.html', context)
 
 def registerUser(request):
     user = request.user
@@ -473,6 +480,17 @@ def scheduled_trips(request):
 
     return render(request, 'scheduled_trips.html', context)
 
+def api_scheduled_trips(request):
+    try:
+        user_department = Department.objects.get(user=request.user).status
+    except ObjectDoesNotExist:
+        user_department = None
+
+    schedules = Schedule.objects.filter(status='1', schedule__gt=datetime.now(), able_to_book=user_department).all()
+    schedules_json = serializers.serialize('json', schedules)
+
+    return JsonResponse(schedules_json, safe=False)
+
 @login_required
 def manage_booking(request, schedPK=None, pk=None):
     context['page_title'] = "Manage Booking"
@@ -638,7 +656,7 @@ def handle_request(request, request_id):
             depart=trip_request.depart,
             destination=trip_request.destination,
             schedule=trip_request.schedule,
-            fare=trip_request.fare,
+            seats_available=trip_request.seats,
             status='1'  # assuming '1' means 'Active'
         )
         messages.success(request, 'Request has been added to Scheduled Trips List successfully.')

@@ -12,13 +12,13 @@
 <div class="d-flex flex-column w-100 justify-content-center align-items-center">
    
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-        <div class="card card-default rounded-0 shadow">
+        <div class="card card-default p-2 shadow">
             <div class="card-header">
                 <h4 class="card-title"><b>Find Trip</b></h4>
             </div>
             <div class="card-body">
                 <div class="container-fluid">
-                    <form id="login-user" method="POST" action="{% url 'scheduled-trips-page' %}">
+                    <form id="find_trip" method="POST" action="{% url 'scheduled-trips-page' %}">
                         {% csrf_token %}
                         <div class="mdc-layout-grid">
                             <div class="mdc-layout-grid__inner">
@@ -49,7 +49,7 @@
                                         <div class="col-md-4">
                                             {% comment %} <a href="{% url 'register-user' %}">Signup</a> {% endcomment %}
                                         </div>
-                                        <button class="btn btn-sm rounded-0 btn-primary">
+                                        <button class="btn btn-primary">
                                                 Find Trip
                                             </button>
                                     </div>

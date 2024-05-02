@@ -28,19 +28,60 @@
 	background: #14A44D;
 	color: #fff;
 }
+main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+}
 </style>
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <div class="card card-default rounded-0 shadow ">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="tripRequestModalLabel">Request a Trip</h5>
+<div class="d-flex flex-column w-100 justify-content-center align-items-center">
+   
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        <div class="card card-default p-2 shadow">
+            <div class="card-header">
+                <h4 class="card-title"><b>Request A Trip</b></h4>
             </div>
-            <div class="modal-body">
-                <form id="tripRequestForm" method="post" onsubmit="return validateDate()">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-outline-success">Send Request</button>
-                </form>
+            <div class="card-body">
+                <div class="container-fluid">
+                    <form id="tripRequestForm" method="post" onsubmit="return validateDate()">
+                        {% csrf_token %}
+                        <div class="mdc-layout-grid">
+                            <div class="mdc-layout-grid__inner">
+                                <div class="form-group mb-3">
+                                    <label for="id_bus" class="control-label">Bus</label>
+                                    {{ form.bus }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="id_schedule" class="control-label">Schedule</label>
+                                    {{ form.schedule }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="id_depart" class="control-label">Depart</label>
+                                    {{ form.depart }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="id_destination" class="control-label">Destination</label>
+                                    {{ form.destination }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="id_seats" class="control-label">Seats</label>
+                                    {{ form.seats }}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <div class="d-flex w-100 justify-content-between align-items-center">
+                                        <div class="col-md-4">
+                                            <!-- You can put something here if you want -->
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Send Request</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

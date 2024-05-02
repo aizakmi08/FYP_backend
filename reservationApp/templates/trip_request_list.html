@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load humanize %}
 {% block pageContent %}
 <style>
 .btn {
@@ -18,44 +18,54 @@
 }
 </style>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <div class="card card-default rounded-0 shadow ">
+    <div class="card card-default p-2 shadow ">
         <div class="card-header">
-            <h4 class="card-title fw-bold">Trip Requests</h4>
+            <div class="d-flex w-100 align-items-center justify-content-between">
+                <h4 class="card-title fw-bold">Trip Requests List</h4>
+            </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered">
+            <div class="container-fluid">
+            <table class="table table-striped" id="trip_request-list">
+                <colgroup>
+                    <col width="5%">
+                    <col width="10%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="15%">
+                    <col width="10%">
+                    <col width="25%">
+                </colgroup>
                 <thead>
-                    <tr>
-                        <th>User</th>
-                        <th>Vehicle</th>
-                        <th>Depart</th>
-                        <th>Destination</th>
-                        <th>Schedule</th>
-                        <th>Fare</th>
-                        <th>Actions</th>
+                    <tr class="bg-primary bg-opacity-50 text-light">
+                        <th class="px-2 py-2 text-center">#</th>
+                        <th class="px-2 py-2 text-center">User</th>
+                        <th class="px-2 py-2 text-center">Vehicle</th>
+                        <th class="px-2 py-2 text-center">Depart</th>
+                        <th class="px-2 py-2 text-center">Destination</th>
+                        <th class="px-2 py-2 text-center">Schedule</th>
+                        <th class="px-2 py-2 text-center">Seats</th>
+                        <th class="px-2 py-2 text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center">
                     {% for trip_request in trip_requests %}
                     <tr>
-                        <td>{{ trip_request.user.username }}</td>
-                        <td>{{ trip_request.bus.bus_number }}</td>
-                        <td>{{ trip_request.depart.location }}</td>
-                        <td>{{ trip_request.destination.location }}</td>
-                        <td>{{ trip_request.schedule }}</td>
-                        <td>{{ trip_request.fare }}</td>
+                        <td class="px-2 py-1 align-middle">{{ forloop.counter }}</td>
+                        <td class="px-1 py-1 align-middle text-center">{{ trip_request.user.username }}</td>
+                        <td class="px-1 py-1 align-middle text-center">{{ trip_request.bus.bus_number }}</td>
+                        <td class="px-1 py-1 align-middle text-center">{{ trip_request.depart.location }}</td>
+                        <td class="px-1 py-1 align-middle text-center">{{ trip_request.destination.location }}</td>
+                        <td class="px-1 py-1 align-middle text-center">{{ trip_request.schedule }}</td>
+                        <td class="px-1 py-1 align-middle text-center">{{ trip_request.seats }}</td>
                         <td class="px-2 py-1 align-middle text-center">
                             <form method="post" action="{% url 'handle_request' trip_request.id %}">
                                 {% csrf_token %}
-                                <button class="btn btn-outline-success" type="submit" name="action" value="accept">Accept</button>
-                                <button class="btn btn-outline-danger" type="submit" name="action" value="reject">Reject</button>
-                                
+                                <button class="btn btn-success" type="submit" name="action" value="accept"><i class="fa fa-check" aria-hidden="true"></i></button>
+                                <button class="btn btn-danger" type="submit" name="action" value="reject"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </form>
                         </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="8">No trip requests.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -63,4 +73,22 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock pageContent %}
+{% block ScriptBlock %}
+<script>
+    $(function() {
+        $('#trip_request-list').DataTable({
+                columnDefs: [{
+                    orderable: false,
+                    targets: 7
+                }],
+                initComplete: function(settings, json) {
+                    $('table td, table th').addClass('px-2 py-1')
+                },
+                drawCallback: function(settings) {
+                    $('table td, table th').addClass('px-2 py-1')
+                }
+            })
+        })
+</script>
+{% endblock ScriptBlock %}

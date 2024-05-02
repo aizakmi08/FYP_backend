@@ -21,6 +21,11 @@
     <link rel="stylesheet" href="{% static 'assets/default/css/fonts.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Oswald:300,400">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fullcalendar.io/releases/main/core/main.css' rel='stylesheet' />
+    <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js'></script>
+    <script src='https://fullcalendar.io/releases/main/core/main.js'></script>
+    <script src='https://fullcalendar.io/releases/main/daygrid/main.js'></script>
     <script src="{% static 'assets/font-awesome/js/all.min.js' %}"></script>
     <script src="{% static 'assets/default/js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
@@ -30,6 +35,28 @@
     <script type="text/javascript" src="{% static 'assets/mdb-blogtemplate/js/mdb.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'assets/default/js/script.js' %}"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+    <style>
+        h4.card-title {
+            display: inline-block;
+            font-family: 'Oswald', sans-serif;
+            text-shadow: none;
+        }
+        .btn {
+            border-radius: 0;
+            margin: 3px;
+            text-transform: uppercase;
+            font-family: 'Oswald', sans-serif;
+        }
+        .btn-outline-danger:hover {
+            background: #DC4C64;
+            color: #fff;
+        }
+        .btn-outline-primary:hover {
+            background: #007bff;
+            color: #fff;
+        }
+        
+        </style>
     {% block headerContent %} {% endblock headerContent %}
 </head>
 

@@ -217,23 +217,6 @@ html {
 <section class="">
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="card rounded-0 shadow border-primary text-start summary-card my-3">
-                <div class="card-body">
-                    <div class="d-flex w-100">
-                        <div class="col-8 pe-2">
-                            <div class="summary-title fs-5 border-bottom">Total Categories</div>
-                            <div class="summary-count text-end fw-bolder mt-3 px-4">{{ categories|intcomma }}</div>
-                        </div>
-                        <div class="col-4">
-                            <div class="summary-icon p-3 rounded border text-center bg-gradient bg-light">
-                                <i class="fa fa-list"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <div class="card rounded-0 shadow border-warning text-start summary-card my-3">
                 <div class="card-body">
                     <div class="d-flex w-100">
@@ -255,7 +238,7 @@ html {
                 <div class="card-body">
                     <div class="d-flex w-100">
                         <div class="col-8 pe-2">
-                            <div class="summary-title fs-5 border-bottom">Total Upcoming Trip</div>
+                            <div class="summary-title fs-5 border-bottom">Upcoming Trips</div>
                             <div class="summary-count text-end fw-bolder mt-3 px-4">{{ upcoming_trip|intcomma }}</div>
                         </div>
                         <div class="col-4">
@@ -267,9 +250,26 @@ html {
                 </div>
             </div>
         </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+            <div class="card rounded-0 shadow border-info text-start summary-card my-3">
+                <div class="card-body">
+                    <div class="d-flex w-100">
+                        <div class="col-8 pe-2">
+                            <div class="summary-title fs-5 border-bottom">Today's Trips</div>
+                            <div class="summary-count text-end fw-bolder mt-3 px-4">{{ todays_trip|intcomma }}</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="summary-icon p-3 rounded border text-center bg-gradient bg-light">
+                                <i class="fa fa-calendar-day fs-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {% endif %}
 </section>
 
+{% endif %}
 
-</div> {% endblock pageContent %}
+{% endblock pageContent %}

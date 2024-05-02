@@ -4,7 +4,7 @@
         <div class="card-header">
             <div class="w-100 d-flex justify-content-between">
                 <h5 class="fw-bolder card-title">Product Stock History</h5>
-                <button class="btn btn-primary btn-sm rounded-0 bg-gradient px-3" type="button" id="add_stock"><i class="fa fa-plus"></i> Add Stock</button>
+                <button class="btn btn-primary btn-sm px-3" type="button" id="add_stock"><i class="fa fa-plus"></i> Add Stock</button>
             </div>
         </div>
         <div class="card-body">
@@ -24,7 +24,7 @@
                 </fieldset>
                 <fieldset>
                     <legend>History</legend>
-                    <table class="table table-bordered" id="stock-tbl">
+                    <table class="table table-striped" id="stock-tbl">
                         <colgroup>
                             <col width="5%">
                             <col width="25%">
@@ -39,7 +39,7 @@
                             <th class="text-center">Type</th>
                             <th class="text-center">Action</th>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center">
                             {% for stock in stocks %}
                             <tr>
                                 <td class="text-center">{{ forloop.counter }}</td>

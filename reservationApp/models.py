@@ -64,11 +64,12 @@ class Schedule(models.Model):
     depart = models.ForeignKey(Location,on_delete=models.CASCADE, related_name='depart_location')
     destination = models.ForeignKey(Location,on_delete=models.CASCADE, related_name='destination')
     schedule= models.DateTimeField()
-    fare= models.FloatField()
+    seats_available = models.IntegerField(null=True)  # replaced fare with seats_available
     status = models.CharField(max_length=2, choices=(('1','Active'),('2','Cancelled')), default=1)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
     ABLE_TO_BOOK_CHOICES = [
+        ('None', 'None'),
         ('Student', 'Student'),
         ('Staff', 'Staff'),
         ('Faculty', 'Faculty'),
@@ -76,7 +77,7 @@ class Schedule(models.Model):
     able_to_book = models.CharField(
         max_length=10,
         choices=ABLE_TO_BOOK_CHOICES,
-        default='Student',
+        default='None',
     )
 
     def __str__(self):
@@ -85,12 +86,13 @@ class Schedule(models.Model):
     def count_available(self):
         booked = Booking.objects.filter(schedule=self, status='2').aggregate(Sum('seats'))['seats__sum']
         if booked is not None:
-            return self.bus.seats - booked
+            return self.seats_available - booked
         else:
             # Handle the case where no seats are booked for this schedule
-            return self.bus.seats
+            return self.seats_available
 
 class Booking(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)  # allow NULL values temporarily
     code = models.CharField(max_length=100)
     name = models.CharField(max_length=250)
     schedule = models.ForeignKey(Schedule,on_delete=models.CASCADE)
@@ -102,8 +104,8 @@ class Booking(models.Model):
     def __str__(self):
         return str(self.code + ' - ' + self.name)
 
-    def total_payable(self):
-        return self.seats * self.schedule.fare
+    # def total_payable(self):
+    #     return self.seats * self.schedule.fare
 
 class TripRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -111,7 +113,7 @@ class TripRequest(models.Model):
     depart = models.ForeignKey(Location,on_delete=models.CASCADE, related_name='request_depart_location')
     destination = models.ForeignKey(Location,on_delete=models.CASCADE, related_name='request_destination')
     schedule= models.DateField()
-    fare= models.FloatField()
+    seats= models.IntegerField(null=True)
     status = models.CharField(max_length=10, choices=(('active', 'Active'), ('cancelled', 'Cancelled'), ('accepted', 'Accepted'), ('rejected', 'Rejected')), default='active')
     date_created = models.DateField(default=timezone.now)
     date_updated = models.DateField(auto_now=True)

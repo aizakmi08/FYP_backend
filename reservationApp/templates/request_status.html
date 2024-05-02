@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block pageContent %}
 <style>
 .status-active {
@@ -17,48 +17,49 @@
 .status-cancelled {
     color: gray;
 }
+main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+}
 </style>
-<div class="status-container">
-    <h2>Trip Request Status</h2>
-    {% if trip_request.status == Null %}
-    <span>No trip requests made</span>
-    {% else %}
-    <p><strong>Vehicle:</strong> {{ trip_request.bus.bus_number }}</p>
-    <p><strong>Depart:</strong> {{ trip_request.depart }}</p>
-    <p><strong>Destination:</strong> {{ trip_request.destination }}</p>
-    <p><strong>Schedule:</strong> {{ trip_request.schedule }}</p>
-    <p><strong>Fare:</strong> {{ trip_request.fare }}</p>
-    <p><strong>Status:</strong> 
-    {% if trip_request.status == 'active' %}
-        <span class="status-active">Under consideration</span>
-    {% elif trip_request.status == 'accepted' %}
-        <span class="status-accepted">Accepted</span>
-    {% elif trip_request.status == Null %}
-        <span>No trip requests made</span>
-    {% elif trip_request.status == 'rejected' %}
-        <span class="status-rejected">Rejected</span>
-    {% else %}
-        <span class="status-cancelled">Cancelled</span>
-    {% endif %}
-    </p>
-    {% endif %}
-    </p>
+<div class="d-flex flex-column w-100 justify-content-center align-items-center">
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        <div class="card card-default p-2 shadow">
+            <div class="card-header">
+                <h4 class="card-title"><b>Request Status</b></h4>
+            </div>
+            <div class="card-body">
+                <div class="container-fluid">
+                    {% if trip_request.status == Null %}
+                    <span>No trip requests made</span>
+                    {% else %}
+                    <p><strong>Vehicle:</strong> {{ trip_request.bus.bus_number }}</p>
+                    <p><strong>Depart:</strong> {{ trip_request.depart }}</p>
+                    <p><strong>Destination:</strong> {{ trip_request.destination }}</p>
+                    <p><strong>Schedule:</strong> {{ trip_request.schedule }}</p>
+                    <p><strong>Seats:</strong> {{ trip_request.seats }}</p>
+                    <p><strong>Status:</strong> 
+                    {% if trip_request.status == 'active' %}
+                        <span class="status-active" style="color: rgb(255, 238, 0); font-weight: bold;">Under consideration</span>
+                    {% elif trip_request.status == 'accepted' %}
+                    <span class="status-accepted" style="color: rgb(4, 227, 4); font-weight: bold;">Accepted</span>
+                    {% elif trip_request.status == Null %}
+                        <span>No trip requests made</span>
+                    {% elif trip_request.status == 'rejected' %}
+                        <span class="status-rejected" style="color: rgb(255, 37, 37); font-weight: bold;">Rejected</span>
+                    {% else %}
+                        <span class="status-cancelled" style="color: rgb(255, 37, 37); font-weight: bold;">Cancelled</span>
+                    {% endif %}
+                    </p>
+                    {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- <div class="status-container">
-    <h2>Booking Status</h2>
-    <p><strong>Vehicle:</strong> {{ booking.schedule.bus.bus_number }}</p>
-    <p><strong>Depart:</strong> {{ booking.schedule.depart }}</p>
-    <p><strong>Destination:</strong> {{ booking.schedule.destination }}</p>
-    <p><strong>Schedule:</strong> {{ booking.schedule.schedule }}</p>
-    <p><strong>Fare:</strong> {{ booking.schedule.fare }}</p>
-    <p><strong>Status:</strong> 
-    {% if booking.status == '1' %}
-        <span class="status-pending">Pending</span>
-    {% elif booking.status == '2' %}
-        <span class="status-approved">Approved</span>
-    {% else %}
-        <span class="status-rejected">Rejected</span>
-    {% endif %}
-    </p>
-</div> -->
 {% endblock %}
