@@ -83,12 +83,12 @@ def home(request):
     context['last_month_trips'] = Schedule.objects.filter(schedule__date__range=(last_month, today)).count()
     
     if context['last_month_trips'] > 0:
-        context['trip_increase_percentage'] = ((context['upcoming_trip'] - context['last_month_trips']) / context['last_month_trips']) * 100
+        context['trip_increase_percentage'] = int(((context['upcoming_trip'] - context['last_month_trips']) / context['last_month_trips']) * 100)
     else:
         context['trip_increase_percentage'] = 0
 
     if context['yesterdays_trip'] > 0:
-        context['todays_trip_increase_percentage'] = ((context['todays_trip'] - context['yesterdays_trip']) / context['yesterdays_trip']) * 100
+        context['todays_trip_increase_percentage'] = int(((context['todays_trip'] - context['yesterdays_trip']) / context['yesterdays_trip']) * 100)
     else:
         context['todays_trip_increase_percentage'] = 0
 
