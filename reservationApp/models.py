@@ -121,6 +121,15 @@ class TripRequest(models.Model):
     def __str__(self):
         return str(self.user.username + ' - ' + self.bus.bus_number)
 
+
+class Driver(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 # @receiver(models.signals.post_save, sender=Invoice_Item)
 # def stock_update(sender, instance, **kwargs):
 #     stock = Stock(product = instance.product, quantity = instance.quantity, type = 2)

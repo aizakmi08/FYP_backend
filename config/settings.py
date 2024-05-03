@@ -140,9 +140,9 @@ ID_ENCRYPTION_KEY = b'UdhnfelTxqj3q6BbPe7H86sfQnboSBzb0irm2atoFUw='
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_FROM = 'ulugbeknasyrov08@gmail.com'
-EMAIL_HOST_USER = 'ulugbeknasyrov08@gmail.com'
-EMAIL_HOST_PASSWORD = 'xhzeeqyjkgrlbohr'
+EMAIL_FROM = 'ucatransportation01@gmail.com'
+EMAIL_HOST_USER = 'ucatransportation01@gmail.com'
+EMAIL_HOST_PASSWORD = 'wxupkvnfcdvbdaas'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
