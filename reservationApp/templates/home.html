@@ -155,6 +155,7 @@ html {
 	font-size: 40px;	
 	text-transform: uppercase;
 }
+
 </style>
 <div class="container-lg">
     <div class="row">
@@ -214,62 +215,219 @@ html {
 
 {% else %}
 <!--Section: Content-->
-<section class="">
+<section>
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="card rounded-0 shadow border-warning text-start summary-card my-3">
+            <div class="card rounded-0 shadow border-danger text-start summary-card my-3">
                 <div class="card-body">
-                    <div class="d-flex w-100">
-                        <div class="col-8 pe-2">
-                            <div class="summary-title fs-5 border-bottom">Total Vehicles</div>
-                            <div class="summary-count text-end fw-bolder mt-3 px-4">{{ buses|intcomma }}</div>
+                    <div class="row">
+                      <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Upcoming Trips</h5>
+                        <span class="h2 font-weight-bold mb-0">{{ upcoming_trip|intcomma }}</span>
+                      </div>
+                      <div class="col-auto">
+                        <div style="width: 3rem; height: 3rem; display: inline-flex; padding: 12px; text-align: center; border-radius: 50%; align-items: center; justify-content: center;" class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                          <i style="font-size: 2rem;" class="fa fa-bus"></i>
                         </div>
-                        <div class="col-4">
-                            <div class="summary-icon p-3 rounded border text-center bg-gradient bg-light">
-                                <i class="fa fa-bus fs-2"></i>
-                            </div>
-                        </div>
+                      </div>
                     </div>
-                </div>
+                    <p class="mt-3 mb-0 text-muted text-sm">
+                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{ trip_increase_percentage|intcomma }}%</span>
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="card rounded-0 shadow border-success text-start summary-card my-3">
+            <div class="card rounded-0 shadow border-warning text-start summary-card my-3">
                 <div class="card-body">
-                    <div class="d-flex w-100">
-                        <div class="col-8 pe-2">
-                            <div class="summary-title fs-5 border-bottom">Upcoming Trips</div>
-                            <div class="summary-count text-end fw-bolder mt-3 px-4">{{ upcoming_trip|intcomma }}</div>
+                    <div class="row">
+                      <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Today's Trips</h5>
+                        <span class="h2 font-weight-bold mb-0">{{ todays_trip|intcomma }}</span>
+                      </div>
+                      <div class="col-auto">
+                        <div style="width: 3rem; height: 3rem; display: inline-flex; padding: 12px; text-align: center; border-radius: 50%; align-items: center; justify-content: center;" class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                          <i style="font-size: 2rem;" class="fa fa-calendar"></i>
                         </div>
-                        <div class="col-4">
-                            <div class="summary-icon p-3 rounded border text-center bg-gradient bg-light">
-                                <i class="fa fa-file-invoice fs-2"></i>
-                            </div>
-                        </div>
+                      </div>
                     </div>
+                    <p class="mt-3 mb-0 text-muted text-sm">
+                      <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{ todays_trip_increase_percentage|intcomma }}%</span>
+                      <span class="text-nowrap">Since yesterday</span>
+                    </p>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <div class="card rounded-0 shadow border-info text-start summary-card my-3">
                 <div class="card-body">
-                    <div class="d-flex w-100">
-                        <div class="col-8 pe-2">
-                            <div class="summary-title fs-5 border-bottom">Today's Trips</div>
-                            <div class="summary-count text-end fw-bolder mt-3 px-4">{{ todays_trip|intcomma }}</div>
+                    <div class="row">
+                      <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">Trips Made Last Month</h5>
+                        <span class="h2 font-weight-bold mb-0">{{ last_month_trips|intcomma }}</span>
+                      </div>
+                      <div class="col-auto">
+                        <div style="width: 3rem; height: 3rem; display: inline-flex; padding: 12px; text-align: center; border-radius: 50%; align-items: center; justify-content: center;" class="icon icon-shape bg-info text-white rounded-circle shadow">
+                          <i style="font-size: 2rem;" class="fa fa-calendar"></i>
                         </div>
-                        <div class="col-4">
-                            <div class="summary-icon p-3 rounded border text-center bg-gradient bg-light">
-                                <i class="fa fa-calendar-day fs-2"></i>
-                            </div>
-                        </div>
+                      </div>
                     </div>
-                </div>
+                    <p class="mt-3 mb-0 text-muted text-sm">
+                      <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                      <span class="text-nowrap">Since last week</span>
+                    </p>
+                  </div>
             </div>
         </div>
     </div>
 </section>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card card-default p-2 shadow ">
+        <div class="card-header">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+                <h4 class="card-title fw-bold">Today's Trips</h4>
+                <div class="tools">
+                    <button type="button" class="btn btn-primary btn-sm" id='add_new'><i class="fa fa-plus"></i> Add New</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="container-fluid">
+                <table class="table table-striped" id="schedule-list">
+                        <colgroup>
+                            <col width="5%">
+                            <col width="15%">
+                            <col width="15%">
+                            <col width="20%">
+                            <col width="12%">
+                            <col width="12%">
+                            <col width="10%">
+                            <col width="11%">
+                        </colgroup>
+                        <thead>
+                            <tr class="bg-primary bg-opacity-50 text-light">
+                                <th class="px-2 py-2 text-center">#</th>
+                                <th class="px-2 py-2 text-center">Schedule</th>
+                                <th class="px-2 py-2 text-center">Vehicle</th>
+                                <th class="px-2 py-2 text-center">Route (From - To)</th>
+                                <th class="px-2 py-2 text-center">Department</th>
+                                <th class="px-2 py-2 text-center">Seats Available</th>
+                                <th class="px-2 py-2 text-center">Status</th>
+                                <th class="px-2 py-2 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            {% for trip in todays_trips %}
+                            <tr>
+                                <td class="px-2 py-1 align-middle">{{ forloop.counter }}</td>
+                                <td class="px-2 py-1 align-middle">{{ trip.schedule|date:"Y-m-d h:i A" }}</td>
+                                <td class="px-2 py-1 align-middle">
+                                    <div class="lh-1">
+                                        <div>{{ trip.bus.bus_number }}</div>
+                                        <small class="text-muted">{{ trip.bus.category }}</small>
+                                    </div>
+                                </td>
+                                <td class="px-2 py-1 align-middle">
+                                    <div class="lh-1">
+                                        <div>{{ trip.depart }}</div>
+                                        <div>{{ trip.destination }}</div>
+                                    </div>
+                                </td>
+                                <td class="px-2 py-1 align-middle">{{ trip.able_to_book }}</td>
+                                <td class="px-2 py-1 align-middle text-center">{{ trip.count_available|floatformat:0|intcomma }}</td>
+                                <td class="px-1 py-1 align-middle text-center">
+                                    {% if trip.status == '1' %}
+                                    <span class="badge bg-primary rounded-pill px-2">Active</span> {% else %}
+                                    <span class="badge bg-danger rounded-pill px-2">Cancelled</span> {% endif %}
+                                </td>
+                                <td class="px-2 py-1 align-middle text-center">
+                                    <a class="btn btn-outline-primary btn-sm edit-data" href="javascript:void(0)" data-id="{{ trip.pk }}" title="Edit">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <button class="btn btn-outline-danger btn-sm delete-data" type="button" data-id="{{ trip.pk }}" title="Delete">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="text-center">No trips scheduled for today.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endif %}
 
-{% endblock pageContent %}
+{% endblock pageContent %}{% block ScriptBlock %}
+<script>
+    $(function() {
+        $('#add_new').click(function() {
+            uni_modal('<i class="fa fa-plus"></i> Add Schedule', '{% url "manage-schedule" %}', 'modal-md')
+        })
+        $('.edit-data').click(function() {
+            uni_modal('<i class="fa fa-edit"></i> Edit Schedule', '{% url "manage-schedule" %}/' + $(this).attr('data-id'), 'modal-md')
+        })
+        $('.delete-data').click(function() {
+            _conf("Are you sure to delete this Schedule permanently?", "delete_schedule", [$(this).attr('data-id')])
+        })
+
+        $('#schedule-list').DataTable({
+            columnDefs: [{
+                orderable: false,
+                targets: 6
+            }],
+            initComplete: function(settings, json) {
+                $('table td, table th').addClass('px-2 py-1')
+            },
+            drawCallback: function(settings) {
+                $('table td, table th').addClass('px-2 py-1')
+            }
+        })
+    })
+
+    function delete_schedule($id) {
+        start_loader();
+        var _this = $(this)
+        $('.err-msg').remove();
+        var el = $('<div>')
+        el.addClass("alert alert-danger err-msg")
+        el.hide()
+        $.ajax({
+            url: '{% url "delete-schedule" %}',
+            headers: {
+                'X-CSRFToken': "{{csrf_token}}"
+            },
+            method: 'POST',
+            data: {
+                id: $id
+            },
+            dataType: 'json',
+            error: err => {
+                console.log(err)
+                el.text('An error occurred.')
+                el.show('slow')
+                end_loader()
+            },
+            success: function(resp) {
+                if (resp.status == 'success') {
+                    location.reload()
+                } else if (!!resp.msg) {
+                    el.text('An error occurred.')
+                    el.show('slow')
+                } else {
+                    el.text('An error occurred.')
+                    el.show('slow')
+                }
+                end_loader()
+            }
+        })
+    }
+</script>
+{% endblock ScriptBlock %}

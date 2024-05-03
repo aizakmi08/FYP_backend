@@ -30,6 +30,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.core import serializers
+from dateutil.relativedelta import relativedelta
 
 
 context = {
@@ -69,12 +70,29 @@ def logoutuser(request):
 def home(request):
     today = timezone.now()
     tomorrow = today + timezone.timedelta(days=1)
+    yesterday = today - timezone.timedelta(days=1)
+    last_month = today - relativedelta(months=1)
     context['page_title'] = 'Home'
     context['buses'] = Bus.objects.count()
     context['categories'] = Category.objects.count()
     context['trip_requests'] = TripRequest.objects.count()
     context['upcoming_trip'] = Schedule.objects.filter(status=1, schedule__gt=today).count()
+    context['yesterdays_trip'] = Schedule.objects.filter(schedule__date=yesterday.date()).count()
     context['todays_trip'] = Schedule.objects.filter(schedule__range=(today, tomorrow)).count()
+    context['todays_trips'] = Schedule.objects.filter(schedule__date=today.date())
+    context['last_month_trips'] = Schedule.objects.filter(schedule__date__range=(last_month, today)).count()
+    
+    if context['last_month_trips'] > 0:
+        context['trip_increase_percentage'] = ((context['upcoming_trip'] - context['last_month_trips']) / context['last_month_trips']) * 100
+    else:
+        context['trip_increase_percentage'] = 0
+
+    if context['yesterdays_trip'] > 0:
+        context['todays_trip_increase_percentage'] = ((context['todays_trip'] - context['yesterdays_trip']) / context['yesterdays_trip']) * 100
+    else:
+        context['todays_trip_increase_percentage'] = 0
+
+
     return render(request, 'home.html', context)
 
 def registerUser(request):

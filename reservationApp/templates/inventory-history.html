@@ -47,8 +47,8 @@
                                 <td class="text-center">{{ stock.quantity|floatformat:0|intcomma }}</td>
                                 <td class="text-center">
                                     {% if stock.type == '1' %}
-                                    <span class="badge px-3 rounded-pill bg-primary bg-gradient">Stock In</span> {% else %}
-                                    <span class="badge px-3 rounded-pill bg-danger bg-gradient">Stock Out</span> {% endif %}
+                                    <span class="badge px-3 rounded-pill bg-primary">Stock In</span> {% else %}
+                                    <span class="badge px-3 rounded-pill bg-danger">Stock Out</span> {% endif %}
                                 </td>
                                 <td class="text-center">
                                     {% if stock.type == '1' %}

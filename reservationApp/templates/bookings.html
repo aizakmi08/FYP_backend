@@ -50,11 +50,11 @@
                             <td class="px-2 py-1 align-middle text-end">{{ booked.seats|intcomma }}</td>
                             <td class="px-1 py-1 align-middle text-center">
                                 {% if booked.status == '1' %}
-                                <span class="badge bg-primary bg-gradient rounded-pill px-2">Pending</span> 
+                                <span class="badge bg-primary rounded-pill px-2">Pending</span> 
                                 {% elif booked.status == '2' %}
-                                <span class="badge bg-success bg-gradient rounded-pill px-2">Approved</span>
+                                <span class="badge bg-success rounded-pill px-2">Approved</span>
                                 {% else %}
-                                <span class="badge bg-danger bg-gradient rounded-pill px-2">Rejected</span>
+                                <span class="badge bg-danger rounded-pill px-2">Rejected</span>
                                 {% endif %}
                             </td>
                             <td class="px-2 py-1 align-middle text-center">

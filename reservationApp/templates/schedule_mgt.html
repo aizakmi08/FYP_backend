@@ -54,8 +54,8 @@
                             <td class="px-2 py-1 align-middle">{{ schedule.able_to_book }}</td>
                             <td class="px-2 py-1 align-middle text-center">{{ schedule.count_available|floatformat:0|intcomma }}</td>                            <td class="px-1 py-1 align-middle text-center">
                                 {% if schedule.status == '1' %}
-                                <span class="badge bg-primary bg-gradient rounded-pill px-2">Active</span> {% else %}
-                                <span class="badge bg-danger bg-gradient rounded-pill px-2">Cancelled</span> {% endif %}
+                                <span class="badge bg-primary rounded-pill px-2">Active</span> {% else %}
+                                <span class="badge bg-danger rounded-pill px-2">Cancelled</span> {% endif %}
                             </td>
                             <td class="px-2 py-1 align-middle text-center">
                                 <a class="btn btn-outline-primary btn-sm edit-data" href="javascript:void(0)" data-id="{{ schedule.pk }}" title="Edit">

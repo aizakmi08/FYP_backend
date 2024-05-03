@@ -119,7 +119,7 @@ class TripRequest(models.Model):
     date_updated = models.DateField(auto_now=True)
 
     def __str__(self):
-        return str(self.code + ' - ' + self.bus.bus_number)
+        return str(self.user.username + ' - ' + self.bus.bus_number)
 
 # @receiver(models.signals.post_save, sender=Invoice_Item)
 # def stock_update(sender, instance, **kwargs):
