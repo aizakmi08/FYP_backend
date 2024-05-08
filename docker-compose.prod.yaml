@@ -11,16 +11,12 @@ services:
       - media_volume:/home/app/web/mediafiles
     expose:
       - 8000
-    env_file:
-      - ./.env.prod
     depends_on:
       - db
   db:
     image: sqlite:latest
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - ./.env.prod.db
+      - sqlite_data:/var/lib/sqlite/data/
   nginx:
     build: ./nginx
     volumes:
