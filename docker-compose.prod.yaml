@@ -7,23 +7,24 @@ services:
       dockerfile: Dockerfile.prod
     command: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn config.wsgi:application --bind 10.121.4.110:8000"
     volumes:
+      - ./db.sqlite3:/home/app/web/db.sqlite3
       - static_volume:/home/app/web/staticfiles
       - media_volume:/home/app/web/mediafiles
     expose:
       - 8000
-    depends_on:
-      - db
+#    depends_on:
+#      - db
 
-  db:
-    container_name: sqlite_container
-    image: sqlite:latest
+#  db:
+#    container_name: sqlite_container
+#    image: sqlite:latest
+##    volumes:
+##      - sqlite_data:/var/lib/sqlite/data/
 #    volumes:
-#      - sqlite_data:/var/lib/sqlite/data/
-    volumes:
-      - sqlite_data:/db.sqlite3
-    ports:
-      - "5432:5432"
-    restart: always
+#      - sqlite_data:/db.sqlite3
+#    ports:
+#      - "5432:5432"
+#    restart: always
 #  nginx:
 #    build: ./nginx
 #    volumes:
@@ -36,6 +37,6 @@ services:
 #      - web
 
 volumes:
-  sqlite_data:
+#  sqlite_data:
   static_volume:
   media_volume:
