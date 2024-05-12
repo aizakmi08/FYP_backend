@@ -1,4 +1,4 @@
-version: '2.2'
+version: '3'
 
 services:
   web:
@@ -13,10 +13,20 @@ services:
       - 8000
     depends_on:
       - db
-  db:
+
+  sqlite:
+    container_name: sqlite_container
     image: sqlite:latest
     volumes:
-      - sqlite_data:/var/lib/sqlite/data/
+      - sqlite_data:/db.sqlite3
+    ports:
+      - "5432:5432"
+    restart: always
+
+#  db:
+#    image: sqlite:latest
+#    volumes:
+#      - sqlite_data:/var/lib/sqlite/data/
 #  nginx:
 #    build: ./nginx
 #    volumes:
