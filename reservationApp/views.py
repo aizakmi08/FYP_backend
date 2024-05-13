@@ -395,11 +395,23 @@ def delete_bus(request):
 # schedule
 @user_passes_test(admin_check)
 def schedule_mgt(request):
+    context = {}
     context['page_title'] = "Trip Schedules"
-    schedules = Schedule.objects.all()
+    now = timezone.now()
+    schedules = Schedule.objects.filter(schedule__gt=now)
     context['schedules'] = schedules
 
     return render(request, 'schedule_mgt.html', context)
+
+@user_passes_test(admin_check)
+def past_schedule_mgt(request):
+    context = {}
+    context['page_title'] = "Past Trip Schedules"
+    now = timezone.now()
+    past_schedules = Schedule.objects.filter(schedule__lt=now)
+    context['schedules'] = past_schedules
+
+    return render(request, 'past_schedule_mgt.html', context)
 
 @user_passes_test(admin_check)
 def save_schedule(request):

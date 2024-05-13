@@ -31,6 +31,7 @@ urlpatterns = [
     path('manage_bus/<int:pk>',views.manage_bus,name='manage-bus-pk'),
     path('delete_bus',views.delete_bus,name='delete-bus'),
     path('schedule',views.schedule_mgt,name='schedule-page'),
+    path('schedule_history',views.past_schedule_mgt,name='schedule-history'),
     path('manage_schedule',views.manage_schedule,name='manage-schedule'),
     path('save_schedule',views.save_schedule,name='save-schedule'),
     path('manage_schedule/<int:pk>',views.manage_schedule,name='manage-schedule-pk'),
