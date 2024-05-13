@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app/doc-manager-web
+      - data:/app/doc-manager-web/data
+    
+volumes:
+  data:
