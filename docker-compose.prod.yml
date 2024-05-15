@@ -1,4 +1,4 @@
-version: '3'
+version: '3.6'
 
 services:
   web:
@@ -9,7 +9,11 @@ services:
       - "8000:8000"
     volumes:
       - ./:/app/doc-manager-web
-      - data:/app/doc-manager-web/data
+      - sqlite_data:/app/doc-manager-web/data
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings
+      - SQL_ENGINE=django.db.backends.sqlite3
+      - DATABASE=db.sqlite3
     
 volumes:
-  data:
+  sqlite_data:
