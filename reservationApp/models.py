@@ -117,6 +117,7 @@ class TripRequest(models.Model):
     status = models.CharField(max_length=10, choices=(('active', 'Active'), ('cancelled', 'Cancelled'), ('accepted', 'Accepted'), ('rejected', 'Rejected')), default='active')
     date_created = models.DateField(default=timezone.now)
     date_updated = models.DateField(auto_now=True)
+    description = models.TextField(null=True)
 
     def __str__(self):
         return str(self.user.username + ' - ' + self.bus.bus_number)

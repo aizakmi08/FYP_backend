@@ -16,6 +16,15 @@
 	background: #14A44D;
 	color: #fff;
 }
+.btn-outline-secondary{
+    border-color: #9FA6B2;
+	color: #9FA6B2;
+}
+.btn-outline-secondary:hover {
+    border-color: #9FA6B2;
+	background: #9FA6B2;
+	color: #fff;
+}
 </style>
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card card-default p-2 shadow ">
@@ -47,6 +56,7 @@
                         <th class="px-2 py-2 text-center">Schedule</th>
                         <th class="px-2 py-2 text-center">Seats</th>
                         <th class="px-2 py-2 text-center">Actions</th>
+                        <th class="px-2 py-2 text-center">Info</th>
                     </tr>
                 </thead>
                 <tbody class="text-center">
@@ -66,7 +76,35 @@
                                 <button class="btn btn-danger" type="submit" name="action" value="reject"><i class="fa fa-times" aria-hidden="true"></i></button>
                             </form>
                         </td>
+                        <td class="px-2 py-1 align-middle text-center">
+                            <button type="button" class="btn btn-outline-primary btn-sm view-data" data-bs-toggle="modal" data-bs-target="#tripRequestModal{{trip_request.id}}">
+                                <i class="fa fa-info-circle" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                        
                     </tr>
+                    <div class="modal fade" id="tripRequestModal{{trip_request.id}}" tabindex="-1" aria-labelledby="tripRequestModalLabel{{trip_request.id}}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="tripRequestModalLabel{{trip_request.id}}">Trip Request Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>User:</strong> {{ trip_request.user.username }}</p>
+                                    <p><strong>Vehicle:</strong> {{ trip_request.bus.bus_number }}</p>
+                                    <p><strong>Depart:</strong> {{ trip_request.depart.location }}</p>
+                                    <p><strong>Destination:</strong> {{ trip_request.destination.location }}</p>
+                                    <p><strong>Schedule:</strong> {{ trip_request.schedule }}</p>
+                                    <p><strong>Description:</strong> {{ trip_request.description }}</p>
+                                    <p><strong>Seats:</strong> {{ trip_request.seats }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {% endfor %}
                 </tbody>
             </table>
@@ -80,7 +118,7 @@
         $('#trip_request-list').DataTable({
                 columnDefs: [{
                     orderable: false,
-                    targets: 7
+                    targets: [7, 8]
                 }],
                 initComplete: function(settings, json) {
                     $('table td, table th').addClass('px-2 py-1')

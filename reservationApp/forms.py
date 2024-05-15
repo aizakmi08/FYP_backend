@@ -278,13 +278,14 @@ class PayBooked(forms.ModelForm):
 class TripRequestForm(forms.ModelForm):
     class Meta:
         model = TripRequest
-        fields = ['bus', 'depart', 'destination', 'schedule', 'seats']
+        fields = ['bus', 'depart', 'destination', 'schedule', 'seats', 'description']
         widgets = {
             'bus': forms.Select(attrs={'class': 'form-select select2 rounded-0'}),
             'depart': forms.Select(attrs={'class': 'form-select select2 rounded-0'}),
             'destination': forms.Select(attrs={'class': 'form-select select2 rounded-0'}),
             'schedule': forms.DateInput(attrs={'class': 'form-control rounded-0', 'type': 'date'}),
             'seats': forms.NumberInput(attrs={'class': 'form-control rounded-0'}),
+            'description': forms.Textarea(attrs={'class': 'form-control rounded-0'}),
         }
 
 # class SaveProduct(forms.ModelForm):
