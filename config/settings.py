@@ -115,22 +115,29 @@ USE_I18N = True
 USE_TZ = True
 
 
-from os import path
+import os
 
-STATIC_URL = 'static_files/'
-STATIC_ROOT = path.join(BASE_DIR, 'static_files/')
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [ 
-    BASE_DIR / "static",
-    ]
+# STATIC_URL = 'static_files/'
+# STATIC_ROOT = path.join(BASE_DIR, 'static_files/')
 
-#MEDIA
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / "media/"
+# # Static files (CSS, JavaScript, Images)
+# # https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+# STATICFILES_DIRS = [ 
+#     BASE_DIR / "static",
+#     ]
+
+# #MEDIA
+# MEDIA_URL = 'media/'
+# MEDIA_ROOT = BASE_DIR / "media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
