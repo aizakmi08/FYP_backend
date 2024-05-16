@@ -31,6 +31,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.core import serializers
 from dateutil.relativedelta import relativedelta
+from calendar import monthrange
+
 
 
 context = {
@@ -67,31 +69,44 @@ def logoutuser(request):
     return redirect('/')
 
 @login_required
+
 def home(request):
     today = timezone.now()
     tomorrow = today + timezone.timedelta(days=1)
     yesterday = today - timezone.timedelta(days=1)
     last_month = today - relativedelta(months=1)
-    context['page_title'] = 'Home'
-    context['buses'] = Bus.objects.count()
-    context['categories'] = Category.objects.count()
-    context['trip_requests'] = TripRequest.objects.count()
-    context['upcoming_trip'] = Schedule.objects.filter(status=1, schedule__gt=today).count()
-    context['yesterdays_trip'] = Schedule.objects.filter(schedule__date=yesterday.date()).count()
-    context['todays_trip'] = Schedule.objects.filter(schedule__range=(today, tomorrow)).count()
-    context['todays_trips'] = Schedule.objects.filter(schedule__date=today.date())
-    context['last_month_trips'] = Schedule.objects.filter(schedule__date__range=(last_month, today)).count()
-    
-    if context['last_month_trips'] > 0:
-        context['trip_increase_percentage'] = int(((context['upcoming_trip'] - context['last_month_trips']) / context['last_month_trips']) * 100)
-    else:
-        context['trip_increase_percentage'] = 0
+    current_month_start = today.replace(day=1)
+    current_month = today.month
+    current_year = today.year
 
-    if context['yesterdays_trip'] > 0:
-        context['todays_trip_increase_percentage'] = int(((context['todays_trip'] - context['yesterdays_trip']) / context['yesterdays_trip']) * 100)
+    # Get the last day of the current month
+    _, last_day = monthrange(current_year, current_month)
+    current_month_end = today.replace(day=last_day)
+
+    context = {}
+    context['page_title'] = 'Home'
+    context['upcoming_trip'] = Schedule.objects.filter(status=1, schedule__gt=today).count()
+    context['todays_trips'] = Schedule.objects.filter(schedule__date=today.date()).count()
+    context['today_trips'] = Schedule.objects.filter(schedule__date=today)
+    context['yesterdays_trips'] = Schedule.objects.filter(schedule__date=yesterday.date()).count()
+    context['current_month_scheduled_trips'] = Schedule.objects.filter(schedule__date__range=(current_month_start, current_month_end)).count()
+    context['last_month_scheduled_trips'] = Schedule.objects.filter(schedule__date__range=(last_month, current_month_start - timezone.timedelta(days=1))).count()
+
+    last_scheduled_trip = Schedule.objects.order_by('-schedule').first()
+    if last_scheduled_trip:
+        context['last_scheduled_trip_date'] = last_scheduled_trip.schedule
+    else:
+        context['last_scheduled_trip_date'] = 'No trips scheduled'
+
+    if context['yesterdays_trips'] > 0:
+        context['todays_trip_increase_percentage'] = int(((context['todays_trips'] - context['yesterdays_trips']) / context['yesterdays_trips']) * 100)
     else:
         context['todays_trip_increase_percentage'] = 0
 
+    if context['last_month_scheduled_trips'] > 0:
+        context['scheduled_trip_difference'] = int(((context['current_month_scheduled_trips'] - context['last_month_scheduled_trips']) / context['last_month_scheduled_trips']) * 100)
+    else:
+        context['scheduled_trip_difference'] = 0
 
     return render(request, 'home.html', context)
 

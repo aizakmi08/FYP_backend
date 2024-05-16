@@ -54,6 +54,8 @@ class Bus(models.Model):
     status = models.CharField(max_length=2, choices=(('1','Active'),('2','Inactive')), default=1)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
+    # volume = models.FloatField(default=0)
+    # fuel_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
         return self.bus_number
@@ -68,6 +70,8 @@ class Schedule(models.Model):
     status = models.CharField(max_length=2, choices=(('1','Active'),('2','Cancelled')), default=1)
     date_created = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
+    # distance = models.FloatField(default=0)
+
     ABLE_TO_BOOK_CHOICES = [
         ('None', 'None'),
         ('Student', 'Student'),

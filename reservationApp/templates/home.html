@@ -232,8 +232,10 @@ html {
                       </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{ trip_increase_percentage|intcomma }}%</span>
-                      <span class="text-nowrap">Since last month</span>
+                      <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{ trip_increase_percentage|intcomma }}%</span>
+                      <span class="text-nowrap">Since last month</span> -->
+                      <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{ trip_increase_percentage|intcomma }}%</span> -->
+                      <span class="text-nowrap">Last scheduled trip: {{ last_scheduled_trip_date }}</span>
                     </p>
                   </div>
             </div>
@@ -244,7 +246,7 @@ html {
                     <div class="row">
                       <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">Today's Trips</h5>
-                        <span class="h2 font-weight-bold mb-0">{{ todays_trip|intcomma }}</span>
+                        <span class="h2 font-weight-bold mb-0">{{ todays_trips|intcomma }}</span>
                       </div>
                       <div class="col-auto">
                         <div style="width: 3rem; height: 3rem; display: inline-flex; padding: 12px; text-align: center; border-radius: 50%; align-items: center; justify-content: center;" class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -253,8 +255,12 @@ html {
                       </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                      <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{ todays_trip_increase_percentage|intcomma }}%</span>
-                      <span class="text-nowrap">Since yesterday</span>
+                        {% if todays_trip_increase_percentage >= 0 %}
+                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{ todays_trip_increase_percentage|intcomma }}%</span>
+                        {% else %}
+                            <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{ todays_trip_increase_percentage|intcomma }}%</span>
+                        {% endif %}
+                        <span class="text-nowrap">Since yesterday</span>
                     </p>
                 </div>
             </div>
@@ -265,7 +271,7 @@ html {
                     <div class="row">
                       <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">Trips Made Last Month</h5>
-                        <span class="h2 font-weight-bold mb-0">{{ last_month_trips|intcomma }}</span>
+                        <span class="h2 font-weight-bold mb-0">{{ current_month_scheduled_trips|intcomma }}</span>
                       </div>
                       <div class="col-auto">
                         <div style="width: 3rem; height: 3rem; display: inline-flex; padding: 12px; text-align: center; border-radius: 50%; align-items: center; justify-content: center;" class="icon icon-shape bg-info text-white rounded-circle shadow">
@@ -274,8 +280,12 @@ html {
                       </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                      <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
-                      <span class="text-nowrap">Since last week</span>
+                        {% if scheduled_trip_difference >= 0 %}
+                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{ scheduled_trip_difference|intcomma }}%</span>
+                        {% else %}
+                            <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{ scheduled_trip_difference|intcomma }}%</span>
+                        {% endif %}
+                        <span class="text-nowrap">Since last month</span>
                     </p>
                   </div>
             </div>
@@ -318,7 +328,7 @@ html {
                             </tr>
                         </thead>
                         <tbody class="text-center">
-                            {% for trip in todays_trips %}
+                            {% for trip in today_trips %}
                             <tr>
                                 <td class="px-2 py-1 align-middle">{{ forloop.counter }}</td>
                                 <td class="px-2 py-1 align-middle">{{ trip.schedule|date:"Y-m-d h:i A" }}</td>

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% block pageContent %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
 <style>
 .btn {
 	border-radius: 0;
@@ -101,6 +102,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-outline-primary" id="downloadPdf{{trip_request.id}}" onclick="downloadPdf('{{trip_request.id}}')">Download as PDF</button>
                                 </div>
                             </div>
                         </div>
@@ -128,5 +130,17 @@
                 }
             })
         })
+
+    function downloadPdf(tripRequestId) {
+        var doc = new jsPDF();
+        var tripRequest = document.getElementById('tripRequestModal' + tripRequestId);
+        var tripRequestBody = tripRequest.getElementsByClassName('modal-body')[0];
+        var tripRequestInfo = tripRequestBody.innerText;
+        doc.setFontSize(20);
+        doc.text('Trip Request ' + tripRequestId, 10, 20);
+        doc.setFontSize(14);
+        doc.text(tripRequestInfo, 10, 30);
+        doc.save('tripRequest' + tripRequestId + '.pdf');
+    }
 </script>
 {% endblock ScriptBlock %}

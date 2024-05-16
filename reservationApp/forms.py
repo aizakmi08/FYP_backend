@@ -134,6 +134,8 @@ class SaveBus(forms.ModelForm):
     category = forms.CharField(max_length="250")
     seats = forms.CharField(max_length="250")
     status = forms.ChoiceField(choices=[('1', 'Active'), ('2', 'Inactive')])
+    # volume = forms.FloatField(min_value=0)  # Added volume field
+    # fuel_cost = forms.DecimalField(max_digits=10, decimal_places=2, min_value=0)  # Added fuel_cost field
 
     class Meta:
         model = Bus
@@ -171,10 +173,12 @@ class SaveSchedule(forms.ModelForm):
     schedule = forms.CharField(max_length="250")
     status = forms.ChoiceField(choices=[('1', 'Active'), ('2', 'Cancelled')])
     able_to_book = forms.ChoiceField(choices=Schedule.ABLE_TO_BOOK_CHOICES)
+    # distance = forms.FloatField(min_value=0)  # Added distance field
 
     class Meta:
         model = Schedule
         fields = ('code', 'bus', 'depart', 'destination', 'schedule', 'seats_available', 'status', 'able_to_book')
+
 
     def clean_code(self):
         id = self.instance.id if self.instance.id else 0

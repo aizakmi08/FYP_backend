@@ -125,6 +125,12 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# CORS_ALLOW_ALL_ORIGINS = True
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://localhost:1337',
+#     'http://5.59.233.199:1337'
+# ]
+
 # # Static files (CSS, JavaScript, Images)
 # # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
